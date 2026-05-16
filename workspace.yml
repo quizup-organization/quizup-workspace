@@ -27,6 +27,16 @@ repos:
     order: 5
     build: maven
 
+  - name: quizup-theme
+    type: service
+    order: 5
+    build: maven
+
+  - name: quizup-game
+    type: service
+    order: 6
+    build: maven
+
   - name: quizup-deploy
     type: devops
     build: none
