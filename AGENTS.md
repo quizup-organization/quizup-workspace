@@ -2,7 +2,7 @@
 
 > Ce document est destiné aux LLMs chargés d'implémenter ou de refactoriser un module QuizUp.
 > Il décrit les règles, conventions, et patterns à respecter **sans exception**.
-> Le module `identity-service` est la référence d'implémentation.
+> Le module `quizup-identity` est la référence d'implémentation.
 
 ---
 
@@ -12,18 +12,23 @@ Le monorepo contient les modules suivants (ordre de dépendance) :
 
 | Module               | Package racine                          | Rôle                                               |
 |----------------------|-----------------------------------------|----------------------------------------------------|
-| `quizup-common`      | `io.github.cnadjim.quizup.common`       | Types domaine partagés, search, exceptions de base |
-| `quizup-starter`     | `io.github.cnadjim.quizup.microservice` | Spring Boot Starter : CORS, Swagger, Security, WS… |
-| `quizup-theme`       | `io.github.cnadjim.quizup.topic`        | Thèmes (topics) et questions                       |
-| `quizup-identity`    | `io.github.cnadjim.quizup.identity`     | Authentification, utilisateurs (référence)         |
-| `quizup-social`      | `io.github.cnadjim.quizup.social`       | Amis, demandes d'amitié                            |
-| `quizup-profile`     | `io.github.cnadjim.quizup.profile`      | Profils joueurs (WIP)                              |
-| `quizup-matchmaking` | `io.github.cnadjim.quizup.matchmaking`  | Lobbies et appariement                             |
-| `quizup-challenge`   | `io.github.cnadjim.quizup.challenge`    | Défis entre joueurs                                |
-| `quizup-game`        | `io.github.cnadjim.quizup.game`         | Parties (duels), rounds, scoring                   |
-| `quizup-gateway`     | `io.github.cnadjim.quizup.gateway`      | API Gateway Spring Cloud                           |
+| `quizup-common`      | `io.github.quizup.common`               | Types domaine partagés, search, exceptions de base |
+| `quizup-axon`        | `io.github.quizup.axon`                 | Starter Axon distribué (RabbitMQ, deadlines, etc.) |
+| `quizup-starter`     | `io.github.quizup.microservice`         | Spring Boot Starter : CORS, Swagger, Security, WS… |
+| `quizup-theme`       | `io.github.quizup.topic`                | Thèmes (topics) et questions                       |
+| `quizup-identity`    | `io.github.quizup.identity`             | Authentification, utilisateurs (référence)         |
+| `quizup-social`      | `io.github.quizup.social`               | Amis, demandes d'amitié                            |
+| `quizup-profile`     | `io.github.quizup.profile`              | Profils joueurs (WIP)                              |
+| `quizup-matchmaking` | `io.github.quizup.matchmaking`          | Lobbies et appariement                             |
+| `quizup-challenge`   | `io.github.quizup.challenge`            | Défis entre joueurs                                |
+| `quizup-game`        | `io.github.quizup.game`                 | Parties (duels), rounds, scoring                   |
+| `quizup-gateway`     | `io.github.quizup.gateway`              | API Gateway Spring Cloud                           |
 
 **Attention** : le module `quizup-theme` utilise le package `topic` (pas `theme`).
+
+**Structure Maven réelle des services** : chaque service `quizup-{service}` est un parent (`packaging` = `pom`) avec 2 sous-modules :
+- `quizup-{service}-domain` (contient le package `domain/`)
+- `quizup-{service}-infrastructure` (contient `application/` + `infrastructure/` + classe `*ServiceApplication`)
 
 ---
 
@@ -36,7 +41,7 @@ infrastructure → application → domain
 Jamais l'inverse. Jamais de raccourci.
 ```
 
-> Le module `identity-service` est la référence d'implémentation pour les patterns purs.
+> Le module `quizup-identity` est la référence d'implémentation pour les patterns purs.
 > Le module `quizup-game` est la référence pour les patterns avancés (sous-agrégats, sagas, event store).
 
 Un fichier dans `domain/` ne doit contenir **aucun import** des packages suivants :
@@ -53,41 +58,42 @@ Un fichier dans `domain/` ne doit contenir **aucun import** des packages suivant
 ## 1. Structure des packages
 
 ```
-src/main/java/io/github/cnadjim/quizup/{module}/
+services/quizup-{module}/
+├── quizup-{module}-domain/src/main/java/io/github/quizup/{module}/
+│   └── domain/
+│       ├── aggregate/          ← Axon aggregates (write model) + sous-agrégats
+│       ├── command/            ← Records de commandes (@TargetAggregateIdentifier)
+│       ├── event/              ← Records d'événements
+│       ├── exception/          ← Exceptions métier (étendent BaseProblem)
+│       ├── model/              ← Types domaine purs (records Java, enums, constantes métier)
+│       ├── query/              ← Records de queries Axon
+│       └── port/
+│           ├── in/             ← Use Cases (interfaces, contrats d'entrée)
+│           └── out/            ← Ports sortants (interfaces de persistence, services externes)
 │
-├── domain/
-│   ├── aggregate/          ← Axon aggregates (write model) + sous-agrégats
-│   ├── command/            ← Records de commandes (@TargetAggregateIdentifier)
-│   ├── event/              ← Records d'événements
-│   ├── exception/          ← Exceptions métier (étendent BaseProblem)
-│   ├── model/              ← Types domaine purs (records Java, enums, constantes métier)
-│   ├── query/              ← Records de queries Axon
-│   └── port/
-│       ├── in/             ← Use Cases (interfaces, contrats d'entrée)
-│       └── out/            ← Ports sortants (interfaces de persistence, services externes)
-│
-├── application/
-│   ├── handler/
-│   │   └── query/          ← @QueryHandler Axon (point d'entrée bus Axon)
-│   ├── projection/         ← @EventHandler (mise à jour du read model)
-│   ├── saga/               ← @Saga Axon (orchestration longue durée)
-│   └── service/            ← Implémentations des ports entrants
-│
-└── infrastructure/
-    ├── config/             ← @Configuration Spring, DataSeeder
-    ├── in/
-    │   ├── api/            ← @RestController, DTOs request/response, mappers
-    │   └── web/            ← @Controller Thymeleaf (si applicable)
-    └── out/
-        ├── messaging/
-        │   ├── adapter/    ← Adaptateurs bus événements (ex: EventStoreAdapter)
-        │   ├── mapper/     ← Conversion GameEvent → GameNotification
-        │   └── response/   ← DTOs de notification WebSocket
-        └── persistence/
-            ├── adapter/    ← Implémentations des ports sortants (JPA)
-            ├── entity/     ← @Entity JPA (avec @Searchable sur les champs filtrables)
-            ├── mapper/     ← Conversion Entity ↔ Domain model
-            └── repository/ ← JpaRepository + JpaSpecificationExecutor
+└── quizup-{module}-infrastructure/src/main/java/io/github/quizup/{module}/
+    ├── application/
+    │   ├── handler/
+    │   │   └── query/          ← @QueryHandler Axon (point d'entrée bus Axon)
+    │   ├── projection/         ← @EventHandler (mise à jour du read model)
+    │   ├── saga/               ← @Saga Axon (orchestration longue durée)
+    │   └── service/            ← Implémentations des ports entrants
+    ├── infrastructure/
+    │   ├── config/             ← @Configuration Spring, DataSeeder
+    │   ├── in/
+    │   │   ├── api/            ← @RestController, DTOs request/response, mappers
+    │   │   └── web/            ← @Controller Thymeleaf (si applicable)
+    │   └── out/
+    │       ├── messaging/
+    │       │   ├── adapter/    ← Adaptateurs bus événements (ex: EventStoreAdapter)
+    │       │   ├── mapper/     ← Conversion GameEvent → GameNotification
+    │       │   └── response/   ← DTOs de notification WebSocket
+    │       └── persistence/
+    │           ├── adapter/    ← Implémentations des ports sortants (JPA)
+    │           ├── entity/     ← @Entity JPA (avec @Searchable sur les champs filtrables)
+    │           ├── mapper/     ← Conversion Entity ↔ Domain model
+    │           └── repository/ ← JpaRepository + JpaSpecificationExecutor
+    └── {Module}ServiceApplication.java
 ```
 
 ---
@@ -1233,6 +1239,14 @@ SearchRequest (HTTP body)
 Après implémentation d'un module, exécuter ces vérifications :
 
 ```bash
+# Bootstrap workspace (ordre défini dans workspace.yml)
+make check
+make boostrap
+
+# Dans ce monorepo, adapter les chemins :
+#   services/quizup-<service>/quizup-<service>-domain/src/main/java/...
+#   services/quizup-<service>/quizup-<service>-infrastructure/src/main/java/...
+
 # Aucun import infrastructure dans le domaine
 grep -r "infrastructure" src/main/java/.../domain/
 # → Doit retourner 0 résultats

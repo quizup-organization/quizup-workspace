@@ -30,6 +30,10 @@ repos:
     type: service
     build: maven
 
+  - name: quizup-profile
+    type: service
+    build: maven
+
   - name: quizup-theme
     type: service
     build: maven
@@ -39,6 +43,10 @@ repos:
     build: maven
 
   - name: quizup-social
+    type: service
+    build: maven
+
+  - name: quizup-matchmaking
     type: service
     build: maven
 

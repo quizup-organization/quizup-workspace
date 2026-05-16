@@ -57,17 +57,6 @@ CREATE DATABASE quizup_social
 
 COMMENT ON DATABASE quizup_social IS 'Base de données pour le Social Service de QuizUp';
 
-CREATE DATABASE quizup_challenge
-    WITH
-    OWNER = postgres
-    ENCODING = 'UTF8'
-    LC_COLLATE = 'en_US.utf8'
-    LC_CTYPE = 'en_US.utf8'
-    TABLESPACE = pg_default
-    CONNECTION LIMIT = -1;
-
-COMMENT ON DATABASE quizup_challenge IS 'Base de données pour le Challenge Service de QuizUp';
-
 CREATE DATABASE quizup_leaderboard
     WITH
     OWNER = postgres
