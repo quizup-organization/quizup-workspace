@@ -8,6 +8,7 @@ get_dir() {
   case "$1" in
     library) echo "libraries" ;;
     devops)  echo "devops" ;;
+    web-application)     echo "web-applications" ;;
     *)       echo "services" ;;
   esac
 }

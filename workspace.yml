@@ -57,3 +57,7 @@ repos:
   - name: quizup-reusable-workflows
     type: devops
     build: none
+
+  - name: quizup-frontend
+    type: web-application
+    build: npm

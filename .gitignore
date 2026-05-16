@@ -96,4 +96,5 @@ nul
 services/
 devops/
 libraries/
+web-applications/
 .env
