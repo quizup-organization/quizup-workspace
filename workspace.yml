@@ -1,0 +1,36 @@
+organization: quizup-organization
+
+# "order" détermine l'ordre de build Maven (les libs doivent être installées avant les services)
+repos:
+  - name: quizup-parent
+    type: library
+    order: 1
+    build: maven
+
+  - name: quizup-common
+    type: library
+    order: 2
+    build: maven
+
+  - name: quizup-axon
+    type: library
+    order: 3
+    build: maven
+
+  - name: quizup-starter
+    type: library
+    order: 4
+    build: maven
+
+  - name: quizup-identity
+    type: service
+    order: 5
+    build: maven
+
+  - name: quizup-deploy
+    type: devops
+    build: none
+
+  - name: quizup-reusable-workflows
+    type: devops
+    build: none
