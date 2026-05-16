@@ -22,19 +22,24 @@ repos:
     order: 4
     build: maven
 
-  - name: quizup-identity
+  - name: quizup-gateway
     type: service
     order: 5
+    build: maven
+
+  - name: quizup-identity
+    type: service
+    order: 6
     build: maven
 
   - name: quizup-theme
     type: service
-    order: 5
+    order: 7
     build: maven
 
   - name: quizup-game
     type: service
-    order: 6
+    order: 8
     build: maven
 
   - name: quizup-deploy
