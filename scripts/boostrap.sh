@@ -46,18 +46,4 @@ while IFS= read -r line; do
 done < <(yq '.repos[] | [.name, .type] | @tsv' "$WORKSPACE")
 
 # --- Build ---
-echo "▶ Building..."
-while IFS= read -r line; do
-  repo=$(echo "$line" | cut -f1)
-  type=$(echo "$line" | cut -f2)
-  build=$(echo "$line" | cut -f3)
-  dir="$(get_dir "$type")/$repo"
-
-  case "$build" in
-    maven) echo "  · $repo (maven)" && (cd "$dir" && mvn clean install -DskipTests -q) ;;
-    npm)   echo "  · $repo (npm)"   && (cd "$dir" && npm install --silent) ;;
-    none)  ;;
-  esac
-done < <(yq '[.repos | sort_by(.order // 999) | .[] | [.name, .type, .build] | @tsv] | .[]' "$WORKSPACE")
-
-echo "✓ Done"
+bash "$(dirname "$0")/build.sh" --all

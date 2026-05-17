@@ -1,10 +1,16 @@
-.PHONY: check boostrap start-dev apply-dev exit-dev status-dev
+.PHONY: check boostrap build start-dev apply-dev exit-dev status-dev
 
 check: ## Vérifie les dépendances requises
 	@bash scripts/check.sh
 
 boostrap: check ## Clone et build tous les repos
 	@bash scripts/boostrap.sh
+
+build: ## Build les repos ciblés (REPOS=a,b | ALL=1 | interactif)
+	@bash scripts/build.sh \
+		$(if $(REPOS),--repos "$(REPOS)",) \
+		$(if $(ALL),--all,) \
+		$(if $(DRY_RUN),--dry-run,)
 
 start-dev: ## Crée une branche type/scope/feature dans les repos ciblés
 	@bash scripts/start-dev.sh \
