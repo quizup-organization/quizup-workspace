@@ -4,7 +4,7 @@ Workspace local pour cloner et piloter les repositories de l'organisation QuizUp
 
 ### Scripts de productivite git multi-repos
 
-Le workspace fournit quatre scripts pour eviter la repetition des commandes git quand tu travailles sur une meme feature dans plusieurs repos.
+Le workspace fournit cinq scripts pour eviter la repetition des commandes git quand tu travailles sur une meme feature dans plusieurs repos.
 
 #### 1) `start-dev`
 
@@ -39,7 +39,36 @@ Mode dry-run:
 make start-dev TYPE=feature SCOPE=profiles FEATURE=spring-profiles ALL=true DRY_RUN=true
 ```
 
-#### 2) `apply-dev`
+#### 2) `continue-dev`
+
+Objectif: relire la session locale `.dev-session.env` et remettre les repos cibles sur la branche active du dev en cours.
+
+Regles:
+- lit `branch` et `repos` depuis `.dev-session.env` par defaut
+- flow par repo: `fetch` -> `checkout <branch-session>` -> `pull --ff-only origin <branch-session>`
+- echec si le repo contient des changements locaux
+- echec si la branche de session n'existe ni en local ni sur origin
+- si la branche n'existe qu'en local, checkout local + warning (pas de pull distant)
+
+Execution depuis la session:
+
+```bash
+make continue-dev
+```
+
+Execution ciblee:
+
+```bash
+make continue-dev REPOS=quizup-identity,quizup-theme
+```
+
+Mode dry-run:
+
+```bash
+make continue-dev DRY_RUN=true
+```
+
+#### 3) `apply-dev`
 
 Objectif: ajouter, commit et push les changements courants sur les repos cibles.
 
@@ -73,7 +102,7 @@ Mode dry-run:
 make apply-dev TYPE=feature DESC="add spring profile rollout" ALL=true DRY_RUN=true
 ```
 
-#### 3) `exit-dev`
+#### 4) `exit-dev`
 
 Objectif: remettre les repos sur `main` et revenir dans un etat production-ready.
 
@@ -100,7 +129,7 @@ Mode dry-run:
 make exit-dev ALL=true DRY_RUN=true
 ```
 
-#### 4) `status-dev`
+#### 5) `status-dev`
 
 Objectif: afficher la session dev active et l'etat git des repos (branche + clean/dirty).
 

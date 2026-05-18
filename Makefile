@@ -1,4 +1,4 @@
-.PHONY: check boostrap build start-dev apply-dev exit-dev status-dev
+.PHONY: check boostrap build start-dev continue-dev apply-dev exit-dev status-dev
 
 check: ## Vérifie les dépendances requises
 	@bash scripts/check.sh
@@ -18,6 +18,12 @@ start-dev: ## Crée une branche type/scope/feature dans les repos ciblés
 		$(if $(SCOPE),--scope "$(SCOPE)",) \
 		$(if $(FEATURE),--feature "$(FEATURE)",) \
 		$(if $(DESC),--description "$(DESC)",) \
+		$(if $(REPOS),--repos "$(REPOS)",) \
+		$(if $(ALL),--all,) \
+		$(if $(DRY_RUN),--dry-run,)
+
+continue-dev: ## Re-checkout les repos de la session locale sur la branche active
+	@bash scripts/continue-dev.sh \
 		$(if $(REPOS),--repos "$(REPOS)",) \
 		$(if $(ALL),--all,) \
 		$(if $(DRY_RUN),--dry-run,)

@@ -98,4 +98,3 @@ devops/
 libraries/
 web-applications/
 .env
-.dev-session.env

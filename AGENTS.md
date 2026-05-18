@@ -8,7 +8,7 @@
 
 ## 0. Modules Maven
 
-Le monorepo contient les modules suivants (ordre de dépendance) :
+Le workspace local contient actuellement les modules Maven suivants (ordre de dépendance) :
 
 | Module               | Package racine                          | Rôle                                               |
 |----------------------|-----------------------------------------|----------------------------------------------------|
@@ -20,11 +20,18 @@ Le monorepo contient les modules suivants (ordre de dépendance) :
 | `quizup-social`      | `io.github.quizup.social`               | Amis, demandes d'amitié                            |
 | `quizup-profile`     | `io.github.quizup.profile`              | Profils joueurs (WIP)                              |
 | `quizup-matchmaking` | `io.github.quizup.matchmaking`          | Lobbies et appariement                             |
-| `quizup-challenge`   | `io.github.quizup.challenge`            | Défis entre joueurs                                |
 | `quizup-game`        | `io.github.quizup.game`                 | Parties (duels), rounds, scoring                   |
 | `quizup-gateway`     | `io.github.quizup.gateway`              | API Gateway Spring Cloud                           |
 
 **Attention** : le module `quizup-theme` utilise le package `topic` (pas `theme`).
+
+**Attention** : ce dépôt racine est un **workspace multi-repo**, pas un unique projet Maven. La source de vérité pour les repos présents, leur type (`library`, `service`, `devops`, `web-application`) et leur ordre de build est `workspace.yml`.
+
+En pratique, ce workspace contient aussi :
+- `web-applications/quizup-frontend` — application frontend React/Vite/TypeScript
+- `devops/quizup-deploy` et `devops/quizup-reusable-workflows` — dépôts DevOps, hors périmètre des règles hexagonales Java ci-dessous
+
+`quizup-challenge` est encore référencé dans certains dépôts de l'organisation, mais **n'est pas checkout dans ce workspace** au moment de la rédaction.
 
 **Structure Maven réelle des services** : chaque service `quizup-{service}` est un parent (`packaging` = `pom`) avec 2 sous-modules :
 - `quizup-{service}-domain` (contient le package `domain/`)
@@ -95,6 +102,22 @@ services/quizup-{module}/
     │           └── repository/ ← JpaRepository + JpaSpecificationExecutor
     └── {Module}ServiceApplication.java
 ```
+
+Ce pattern ne s'applique pas à `web-applications/quizup-frontend`, qui suit une structure frontend dédiée :
+
+```
+web-applications/quizup-frontend/src/
+├── app/            ← bootstrap (`main.tsx`), router, providers globaux
+├── features/       ← vertical slices par domaine (`auth/`, `game/`, `theme/`, etc.)
+├── shared/         ← API, hooks, stores, types, websocket, UI transverse
+├── components/ui/  ← composants shadcn/ui partagés
+└── lib/            ← utilitaires communs
+```
+
+**Conventions frontend observables** :
+- Alias Vite `@` → `src` (voir `web-applications/quizup-frontend/vite.config.ts`)
+- shadcn/ui activé via `components.json` avec le style `base-nova`
+- Tailwind CSS v4 chargé dans `web-applications/quizup-frontend/src/index.css`
 
 ---
 
@@ -1238,12 +1261,32 @@ SearchRequest (HTTP body)
 
 Après implémentation d'un module, exécuter ces vérifications :
 
+- `workspace.yml` est la source de vérité pour les repos disponibles, leur type et leur ordre de build.
+- `make build` au workspace root délègue à `scripts/build.sh` ; pour un repo `build: npm` comme `quizup-frontend`, cela exécute **uniquement** `npm install --silent`.
+- Pour valider réellement le frontend, exécuter `npm run lint` et `npm run build` directement dans `web-applications/quizup-frontend`.
+- `make start-dev` crée la branche de travail multi-repo et écrit `.dev-session.env`; `make apply-dev` la réutilise, `make status-dev` l'affiche, `make exit-dev` la supprime.
+- `make boostrap` copie `.env.example` vers `.env` si nécessaire, exige `QUIZUP_GITHUB_USERNAME` et `QUIZUP_GITHUB_PASSWORD`, génère `~/.m2/settings.xml` depuis `settings.xml`, clone les repos listés dans `workspace.yml`, puis lance `scripts/build.sh --all`.
+
 ```bash
 # Bootstrap workspace (ordre défini dans workspace.yml)
 make check
 make boostrap
 
-# Dans ce monorepo, adapter les chemins :
+# Build ciblé depuis la racine du workspace
+make build REPOS=quizup-identity,quizup-theme
+
+# Workflow multi-repo avec session locale
+make start-dev TYPE=feature SCOPE=profiles FEATURE=spring-profiles DESC="rollout spring profiles" REPOS=quizup-identity,quizup-theme
+make status-dev
+make apply-dev
+make exit-dev
+
+# Validation frontend (non couverte par make build)
+cd web-applications/quizup-frontend
+npm run lint
+npm run build
+
+# Dans ce workspace, adapter les chemins :
 #   services/quizup-<service>/quizup-<service>-domain/src/main/java/...
 #   services/quizup-<service>/quizup-<service>-infrastructure/src/main/java/...
 
