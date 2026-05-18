@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizUp – Wireframes Duel (Design Fidèle)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ─── TOKENS ──────────────────────────────────────────────── */
+        :root {
+            --bg:        #000000;
+            --white:     #ffffff;
+            --off-white: #f5f5f5;
+            --gray-dark: #1a1a1a;
+            --gray-mid:  #2d2d2d;
+            --gray-text: #888888;
+            --p1:        #e8b000;   /* jaune joueur 1 */
+            --p2:        #2ed573;   /* vert joueur 2  */
+            --timer-col: #00bcd4;   /* teal timer     */
+            --correct:   #27ae60;   /* vert bonne rép */
+            --wrong:     #7b1212;   /* rouge foncé    */
+            --red:       #e53935;   /* rouge vif      */
+            --red-btn:   #e53935;
+            --cyan-btn:  #00bcd4;
+            --gold-btn:  #f5a623;
+            --cat-red:   #e53935;
+            --cat-purple:#7c4dff;
+            --font:      'Nunito', sans-serif;
+            --font-b:    'Nunito Sans', sans-serif;
+            --r-btn:     16px;
+            --r-sm:      10px;
+            --phone-w:   375px;
+            --phone-h:   812px;
+        }
+
+        /* ─── RESET ───────────────────────────────────────────────── */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body {
+            background: #111;
+            font-family: var(--font);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 28px 16px 80px;
+        }
+
+        /* ─── PAGE TITLE ──────────────────────────────────────────── */
+        .page-title {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        .page-title h1 {
+            font-size: 22px; font-weight: 900; letter-spacing: -0.3px;
+            color: #fff;
+        }
+        .page-title p { font-size: 12px; color: #666; margin-top: 4px; }
+        .updated-badge {
+            display: inline-block;
+            background: #e53935;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        /* ─── STICKY NAV ──────────────────────────────────────────── */
+        .nav-bar {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #222;
+            padding: 8px 0;
+            margin-bottom: 36px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .nav-btn {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            color: #666;
+            font-size: 11px;
+            font-family: var(--font);
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all .15s;
+            white-space: nowrap;
+        }
+        .nav-btn:hover, .nav-btn.active {
+            background: var(--red); border-color: var(--red); color: #fff;
+        }
+
+        /* ─── GRID ────────────────────────────────────────────────── */
+        .screens-grid {
+            display: flex; flex-wrap: wrap; gap: 44px;
+            justify-content: center; align-items: flex-start;
+            max-width: 1600px;
+        }
+
+        /* ─── PHONE FRAME ─────────────────────────────────────────── */
+        .screen-wrap {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 12px; scroll-margin-top: 72px;
+        }
+        .screen-label {
+            font-size: 10px; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase; color: #555;
+        }
+        .screen-num {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 20px; height: 20px; border-radius: 50%;
+            background: var(--red); color: #fff;
+            font-size: 10px; font-weight: 900;
+            margin-right: 5px;
+        }
+        .phone {
+            width: var(--phone-w);
+            height: var(--phone-h);
+            background: var(--bg);
+            border-radius: 40px;
+            border: 2px solid #2a2a2a;
+            box-shadow: 0 12px 48px rgba(0,0,0,0.8), 0 0 0 1px #333;
+            overflow: hidden;
+            position: relative;
+            display: flex; flex-direction: column;
+        }
+        /* notch */
+        .phone::before {
+            content: '';
+            position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 90px; height: 24px;
+            background: #000;
+            border-radius: 0 0 14px 14px;
+            z-index: 20;
+        }
+
+        /* ─── SPEC BOX ─────────────────────────────────────────────── */
+        .spec-box {
+            width: var(--phone-w);
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-size: 11px; color: #666; line-height: 1.8;
+        }
+        .spec-box h4 {
+            font-size: 10px; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase; color: var(--red);
+            margin-bottom: 8px;
+        }
+        .spec-row { display: flex; gap: 8px; }
+        .sk { color: #aaa; font-weight: 700; min-width: 80px; flex-shrink: 0; }
+        .sv { color: #555; }
+        .tag { display: inline-block; font-size: 9px; font-weight: 800; padding: 1px 7px; border-radius: 6px; }
+        .tag.y { background: rgba(232,176,0,.2); color: var(--p1); }
+        .tag.g { background: rgba(46,213,115,.15); color: var(--p2); }
+        .tag.r { background: rgba(229,57,53,.15); color: var(--red); }
+        .tag.t { background: rgba(0,188,212,.15); color: var(--timer-col); }
+
+        /* ════════════════════════════════════════════════════════════
+           COMPOSANTS PARTAGÉS
+        ════════════════════════════════════════════════════════════ */
+
+        /* ── Thin top timer bar ── */
+        .top-bar {
+            height: 5px; width: 100%; flex-shrink: 0; position: relative;
+            background: #1a1a1a;
+        }
+        .top-bar-fill {
+            position: absolute; left: 0; top: 0; bottom: 0;
+            background: var(--timer-col);
+            transition: width .3s;
+        }
+
+        /* ── Player header row ── */
+        .player-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px 8px;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .ph-player { display: flex; align-items: center; gap: 8px; flex: 1; }
+        .ph-player.right { flex-direction: row-reverse; }
+        .ph-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: #222; border: 2px solid #444;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0; overflow: hidden;
+        }
+        .ph-info { display: flex; flex-direction: column; }
+        .ph-name { font-size: 12px; font-weight: 700; color: var(--white); }
+        .ph-score { font-size: 22px; font-weight: 900; line-height: 1; }
+        .ph-score.p1 { color: var(--p1); }
+        .ph-score.p2 { color: var(--p2); }
+        .ph-center {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 2px; flex-shrink: 0; min-width: 70px;
+        }
+        .ph-timer-label {
+            font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
+            text-transform: uppercase; color: var(--timer-col);
+        }
+        .ph-timer-num {
+            font-size: 28px; font-weight: 900; color: var(--white);
+            line-height: 1;
+        }
+
+        /* ── Question text ── */
+        .question-zone {
+            flex: 1;
+            display: flex; align-items: center; justify-content: center;
+            padding: 24px 24px 0;
+        }
+        .question-text {
+            font-size: 28px; font-weight: 800;
+            color: var(--white);
+            text-align: center;
+            line-height: 1.3;
+        }
+        .question-text.sm { font-size: 22px; }
+
+        /* ── Answer buttons (vertical stack, 1 col) ── */
+        .answers-stack {
+            display: flex; flex-direction: column; gap: 8px;
+            padding: 16px 14px 20px;
+            flex-shrink: 0;
+        }
+        .answer-btn-q {
+            background: var(--white);
+            border-radius: var(--r-btn);
+            min-height: 72px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 14px 20px;
+            cursor: pointer;
+            position: relative;
+        }
+        .answer-btn-q .atext {
+            font-family: var(--font);
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-dark);
+            text-align: center;
+            line-height: 1.25;
+        }
+        .answer-btn-q.correct  { background: var(--correct); }
+        .answer-btn-q.correct .atext { color: var(--white); }
+        .answer-btn-q.wrong    { background: var(--wrong); }
+        .answer-btn-q.wrong .atext   { color: var(--white); }
+        .answer-btn-q.p1-pick::after {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 5px; background: var(--p1); border-radius: 4px 0 0 4px;
+        }
+        .answer-btn-q.p2-pick::before {
+            content: ''; position: absolute; right: 0; top: 0; bottom: 0;
+            width: 5px; background: var(--p2); border-radius: 0 4px 4px 0;
+        }
+
+        /* ── Answer buttons (2×2 grid) ── */
+        .answers-grid2 {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+            padding: 10px 14px 16px; flex-shrink: 0;
+        }
+        .answer-btn-g {
+            background: var(--white);
+            border-radius: var(--r-btn);
+            min-height: 80px;
+            display: flex; align-items: center; justify-content: center;
+            padding: 12px;
+            cursor: pointer;
+            position: relative;
+        }
+        .answer-btn-g .atext {
+            font-family: var(--font);
+            font-size: 16px; font-weight: 700;
+            color: var(--gray-dark);
+            text-align: center; line-height: 1.25;
+        }
+        .answer-btn-g.correct  { background: var(--correct); }
+        .answer-btn-g.correct .atext { color: var(--white); }
+        .answer-btn-g.wrong    { background: var(--wrong); }
+        .answer-btn-g.wrong .atext   { color: var(--white); }
+
+        /* ── Side color strips ── */
+        .side-strip-left {
+            position: absolute; left: 0; top: 0; bottom: 0;
+            width: 5px;
+        }
+        .side-strip-right {
+            position: absolute; right: 0; top: 0; bottom: 0;
+            width: 5px;
+        }
+
+        /* ── Question image ── */
+        .q-image {
+            margin: 0 14px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            height: 170px;
+            background: #1a1a1a;
+            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 48px;
+            position: relative;
+        }
+        .q-image-label {
+            position: absolute; bottom: 8px; left: 8px;
+            background: rgba(0,0,0,0.6);
+            font-size: 10px; color: #aaa;
+            padding: 3px 8px; border-radius: 6px;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           SCREEN 1 – MATCHMAKING
+        ════════════════════════════════════════════════════════════ */
+        .s1-body {
+            flex: 1;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: space-evenly;
+            padding: 16px 20px 24px;
+        }
+        .s1-category-tag {
+            background: var(--cat-red);
+            color: #fff;
+            font-size: 13px; font-weight: 800;
+            padding: 6px 20px; border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+        .s1-vs-row {
+            display: flex; align-items: center; gap: 20px;
+            width: 100%;
+        }
+        .s1-player { display: flex; flex-direction: column; align-items: center; gap: 10px; flex: 1; }
+        .s1-avatar-big {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: #1a1a1a;
+            border: 3px solid var(--p1);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 36px;
+        }
+        .s1-avatar-big.p2 { border-color: #333; }
+        .s1-name { font-size: 14px; font-weight: 800; color: var(--white); }
+        .s1-sub  { font-size: 11px; color: #555; }
+        .s1-vs {
+            font-size: 36px; font-weight: 900; color: var(--white);
+        }
+        .s1-spinner {
+            width: 32px; height: 32px;
+            border: 3px solid #222;
+            border-top-color: var(--timer-col);
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .s1-dots span {
+            display: inline-block; width: 5px; height: 5px;
+            background: #555; border-radius: 50%;
+            animation: blink 1.4s infinite;
+            margin: 0 2px;
+        }
+        .s1-dots span:nth-child(2){animation-delay:.2s}
+        .s1-dots span:nth-child(3){animation-delay:.4s}
+        @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+        .s1-cancel {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--r-btn);
+            background: #1a1a1a;
+            border: 1px solid #333;
+            text-align: center;
+            font-size: 16px; font-weight: 700; color: #666;
+            cursor: pointer;
+        }
+        .s1-searching {
+            font-size: 13px; color: #555;
+            display: flex; align-items: center; gap: 6px;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           SCREEN 2 – ADVERSAIRE TROUVÉ
+        ════════════════════════════════════════════════════════════ */
+        .s2-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: space-evenly;
+            padding: 10px 20px 24px;
+        }
+        .s2-found {
+            font-size: 14px; font-weight: 800; color: var(--p2);
+            letter-spacing: 0.5px;
+        }
+        .s2-vs-row { display: flex; align-items: center; gap: 16px; width: 100%; }
+        .s2-player { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .s2-avatar {
+            width: 84px; height: 84px; border-radius: 50%;
+            background: #1a1a1a;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 38px; border: 3px solid;
+        }
+        .s2-avatar.p1 { border-color: var(--p1); }
+        .s2-avatar.p2 { border-color: var(--p2); }
+        .s2-pname { font-size: 14px; font-weight: 800; }
+        .s2-plevel { font-size: 11px; color: #555; }
+        .s2-vs-center {
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .s2-vs-text { font-size: 28px; font-weight: 900; }
+        .s2-bolt { font-size: 24px; }
+        .s2-countdown {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: var(--red);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 900;
+        }
+        .s2-cat-card {
+            width: 100%;
+            background: #111;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            padding: 16px;
+            display: flex; align-items: center; gap: 14px;
+        }
+        .s2-cat-icon {
+            width: 52px; height: 52px; border-radius: 12px;
+            background: var(--cat-red);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 26px; flex-shrink: 0;
+        }
+        .s2-cat-name { font-size: 17px; font-weight: 800; }
+        .s2-cat-sub  { font-size: 12px; color: #555; margin-top: 3px; }
+
+        /* ════════════════════════════════════════════════════════════
+           SCREEN 6 – RÉSULTATS GAGNANT / PERDANT
+        ════════════════════════════════════════════════════════════ */
+        .results-header {
+            padding: 36px 16px 12px;
+            display: flex; align-items: center; justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .results-category { font-size: 14px; font-weight: 700; color: #666; flex: 1; text-align: center; }
+        .results-close {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #1a1a1a; border: 1px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; color: #666; cursor: pointer;
+        }
+        .results-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center;
+            padding: 0 16px 16px;
+            overflow-y: auto;
+            gap: 14px;
+        }
+        .results-title {
+            font-size: 40px; font-weight: 900; letter-spacing: -1px;
+        }
+        .results-title.win  { color: var(--p2); }
+        .results-title.lose { color: var(--red); }
+        .results-vs-row {
+            display: flex; align-items: center; gap: 16px; width: 100%;
+            justify-content: center;
+        }
+        .rv-player { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .rv-score {
+            font-size: 28px; font-weight: 900;
+        }
+        .rv-score.p1-win  { color: var(--p2); }
+        .rv-score.p1-lose { color: var(--red); }
+        .rv-score.p2-win  { color: var(--p2); }
+        .rv-score.p2-lose { color: var(--red); }
+        .rv-avatar {
+            width: 72px; height: 72px; border-radius: 50%;
+            background: #1a1a1a; border: 3px solid #333;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px;
+        }
+        .rv-name { font-size: 13px; font-weight: 700; }
+        .rv-sub  { font-size: 11px; color: #555; }
+        .rv-bolt { font-size: 22px; }
+
+        .score-breakdown {
+            display: flex; gap: 6px; width: 100%;
+        }
+        .sb-cell {
+            flex: 1; border-radius: 10px;
+            padding: 8px 4px;
+            display: flex; flex-direction: column;
+            align-items: center; gap: 4px;
+        }
+        .sb-cell.gold   { background: rgba(232,176,0,.15); }
+        .sb-cell.green  { background: rgba(46,213,115,.12); }
+        .sb-cell.blue   { background: rgba(0,188,212,.12); }
+        .sb-cell.purple { background: rgba(124,77,255,.12); }
+        .sb-cell.red    { background: rgba(229,57,53,.12); }
+        .sb-label {
+            font-size: 8px; font-weight: 800; letter-spacing: 1px;
+            text-transform: uppercase; color: #666;
+            text-align: center; line-height: 1.2;
+        }
+        .sb-value { font-size: 18px; font-weight: 900; }
+        .sb-cell.gold   .sb-value { color: var(--p1); }
+        .sb-cell.green  .sb-value { color: var(--p2); }
+        .sb-cell.blue   .sb-value { color: var(--timer-col); }
+        .sb-cell.purple .sb-value { color: #7c4dff; }
+        .sb-cell.red    .sb-value { color: var(--red); }
+
+        /* Donut chart XP */
+        .xp-donut-wrap {
+            width: 100%; display: flex; align-items: center; gap: 16px;
+        }
+        .donut-container {
+            position: relative; width: 110px; height: 110px; flex-shrink: 0;
+        }
+        .donut-svg { width: 110px; height: 110px; transform: rotate(-90deg); }
+        .donut-bg { fill: none; stroke: #1a1a1a; stroke-width: 12; }
+        .donut-fill { fill: none; stroke: var(--red); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 283; stroke-dashoffset: 180; }
+        .donut-center {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+        }
+        .donut-level-label { font-size: 9px; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+        .donut-level { font-size: 22px; font-weight: 900; color: var(--white); line-height: 1; }
+        .xp-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+        .xp-for-next {
+            font-size: 11px; color: #555;
+            display: flex; justify-content: space-between;
+        }
+        .xp-gained-big { font-size: 22px; font-weight: 900; color: var(--red); }
+        .xp-gained-label { font-size: 10px; color: #555; }
+
+        .questions-done-bar {
+            width: 100%;
+        }
+        .qd-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; }
+        .qd-track {
+            height: 8px; background: #1a1a1a; border-radius: 4px; overflow: hidden;
+        }
+        .qd-fill { height: 100%; background: var(--red); border-radius: 4px; width: 40%; }
+
+        .results-actions {
+            display: flex; gap: 8px; width: 100%; flex-shrink: 0;
+            padding: 0 16px 16px;
+        }
+        .ra-btn {
+            flex: 1; padding: 14px 8px; border-radius: 12px;
+            text-align: center; font-size: 14px; font-weight: 800; color: #fff;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .ra-btn.play    { background: var(--red-btn); }
+        .ra-btn.chat    { background: var(--cyan-btn); }
+        .ra-btn.share   { background: var(--gold-btn); }
+        .results-details {
+            text-align: center; font-size: 12px; color: #444;
+            padding-bottom: 8px; cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            flex-shrink: 0;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           SCREEN – CATEGORY PAGE
+        ════════════════════════════════════════════════════════════ */
+        .cat-page-header {
+            background: var(--cat-red);
+            padding: 36px 16px 14px;
+            display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+        }
+        .cat-header-icon { font-size: 22px; }
+        .cat-header-title { font-size: 18px; font-weight: 900; flex: 1; text-align: center; }
+        .cat-header-icons { display: flex; gap: 12px; font-size: 18px; }
+        .cat-body {
+            flex: 1; overflow-y: auto;
+            display: flex; flex-direction: column;
+            gap: 0;
+        }
+        .cat-main-row {
+            display: flex; gap: 12px;
+            padding: 16px;
+            align-items: flex-start;
+        }
+        .cat-img {
+            width: 88px; height: 88px; border-radius: 12px;
+            background: #111; border: 1px solid #222;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 44px; flex-shrink: 0;
+        }
+        .cat-action-col { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .cat-action-btn {
+            padding: 12px 16px; border-radius: 10px;
+            font-size: 15px; font-weight: 800;
+            display: flex; align-items: center; gap: 8px;
+            cursor: pointer;
+        }
+        .cat-action-btn.play    { background: var(--red); color: #fff; }
+        .cat-action-btn.unfollow{ background: #1a1a1a; border: 1px solid #333; color: #888; }
+        .cat-action-btn.ranking { background: #1a1a1a; border: 1px solid #333; color: #7c4dff; }
+        .cat-divider { height: 1px; background: #1a1a1a; margin: 0 16px; }
+        .cat-questions-section { padding: 14px 16px; }
+        .cat-section-title {
+            font-size: 10px; font-weight: 800; letter-spacing: 2px;
+            text-transform: uppercase; color: #555; margin-bottom: 10px;
+        }
+        .cat-progress-bar-track {
+            height: 28px; background: #1a1a1a; border-radius: 8px; overflow: hidden;
+            position: relative;
+        }
+        .cat-progress-bar-fill {
+            height: 100%; background: #1a1a1a;
+            display: flex; align-items: center; padding-left: 10px;
+            font-size: 12px; font-weight: 700; color: #555;
+        }
+        .cat-stats-row {
+            display: flex; padding: 0 16px 16px;
+        }
+        .cat-stat { flex: 1; text-align: center; }
+        .cat-stat-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: #555; }
+        .cat-stat-val   { font-size: 22px; font-weight: 900; color: var(--white); }
+        .cat-stat-num   { font-size: 14px; font-weight: 700; color: #555; }
+        .cat-divider-v  { width: 1px; background: #1a1a1a; margin: 4px 0; }
+
+        /* Bottom nav */
+        .bottom-nav {
+            display: flex; background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            flex-shrink: 0;
+        }
+        .bn-item {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 10px 0 12px;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .bn-icon { font-size: 18px; }
+        .bn-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #444; }
+        .bn-item.active .bn-label { color: var(--red); }
+        .bn-play-btn {
+            width: 52px; height: 52px; border-radius: 50%;
+            background: var(--red);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px;
+            margin-top: -16px;
+            box-shadow: 0 0 0 4px #0a0a0a;
+        }
+
+        /* ════════════════════════════════════════════════════════════
+           WAITING / ANSWER SELECTED
+        ════════════════════════════════════════════════════════════ */
+        .waiting-bar {
+            margin: 0 14px 12px;
+            background: #111;
+            border: 1px solid #222;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex; align-items: center; gap: 10px;
+            flex-shrink: 0;
+        }
+        .wb-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background: #222; font-size: 16px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .wb-text { font-size: 13px; color: #555; flex: 1; }
+        .wb-text b { color: var(--white); }
+
+        /* ════════════════════════════════════════════════════════════
+           TIMEOUT / FORFAIT
+        ════════════════════════════════════════════════════════════ */
+        .timeout-overlay {
+            margin: 8px 14px 10px;
+            background: rgba(229,57,53,.1);
+            border: 1px solid rgba(229,57,53,.3);
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: flex; align-items: center; gap: 12px;
+            flex-shrink: 0;
+        }
+        .to-icon { font-size: 24px; }
+        .to-title { font-size: 17px; font-weight: 800; color: var(--red); }
+        .to-sub   { font-size: 11px; color: #555; margin-top: 2px; }
+
+        .forfeit-body {
+            flex: 1; display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 14px; padding: 20px;
+        }
+        .forfeit-icon { font-size: 64px; opacity: 0.5; }
+        .forfeit-title { font-size: 22px; font-weight: 900; text-align: center; }
+        .forfeit-sub   { font-size: 14px; color: #555; text-align: center; line-height: 1.5; }
+        .forfeit-xp {
+            font-size: 36px; font-weight: 900; color: var(--p2);
+        }
+        .forfeit-xp-label { font-size: 12px; color: #555; }
+    </style>
+</head>
+<body>
+
+<div class="page-title">
+    <div class="updated-badge">v2 – Design Fidèle</div>
+    <h1>QuizUp — Wireframes Duel</h1>
+    <p>Refaits d'après les captures d'écran réelles · 10 écrans + page catégorie</p>
+</div>
+
+<nav class="nav-bar" id="nav">
+    <button class="nav-btn active" onclick="goTo('s1',this)">1 · Matchmaking</button>
+    <button class="nav-btn" onclick="goTo('s2',this)">2 · Adversaire trouvé</button>
+    <button class="nav-btn" onclick="goTo('s3',this)">3 · Question (texte)</button>
+    <button class="nav-btn" onclick="goTo('s4',this)">4 · Question (image)</button>
+    <button class="nav-btn" onclick="goTo('s5',this)">5 · Réponse choisie</button>
+    <button class="nav-btn" onclick="goTo('s6',this)">6 · Révélation réponse</button>
+    <button class="nav-btn" onclick="goTo('s7',this)">7 · Résultats Gagné</button>
+    <button class="nav-btn" onclick="goTo('s8',this)">8 · Résultats Perdu</button>
+    <button class="nav-btn" onclick="goTo('s9',this)">9 · Timeout</button>
+    <button class="nav-btn" onclick="goTo('s10',this)">10 · Forfait adversaire</button>
+    <button class="nav-btn" onclick="goTo('s11',this)">11 · Page Catégorie</button>
+</nav>
+
+<div class="screens-grid">
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 1 – MATCHMAKING
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s1">
+        <div class="screen-label"><span class="screen-num">1</span>Recherche d'adversaire</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:0%"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">—</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">Recherche</span>
+                    <div class="s1-spinner" style="margin:4px auto"></div>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">?</span>
+                        <span class="ph-score p2">—</span>
+                    </div>
+                    <div class="ph-avatar" style="background:#111;border-color:#222;font-size:18px;color:#333">?</div>
+                </div>
+            </div>
+
+            <div class="s1-body">
+                <div class="s1-category-tag">🎬 Cinéma</div>
+                <div class="s1-vs-row">
+                    <div class="s1-player">
+                        <div class="s1-avatar-big">🦊</div>
+                        <div class="s1-name">amandecherie</div>
+                        <div class="s1-sub">Niveau 12</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:10px">
+                        <div class="s1-vs">VS</div>
+                        <div style="font-size:12px;color:#444">en attente…</div>
+                    </div>
+                    <div class="s1-player">
+                        <div class="s1-avatar-big p2" style="border-color:#333;background:#0d0d0d">
+                            <span style="font-size:30px;color:#222">?</span>
+                        </div>
+                        <div class="s1-name" style="color:#333">Adversaire</div>
+                        <div class="s1-sub">Recherche<span class="s1-dots"><span></span><span></span><span></span></span></div>
+                    </div>
+                </div>
+                <div class="s1-cancel">Annuler</div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Fond</span><span class="sv">Noir pur #000000</span></div>
+            <div class="spec-row"><span class="sk">Header</span><span class="sv">Avatar | Nom + score | Timer | Nom + score | Avatar</span></div>
+            <div class="spec-row"><span class="sk">Spinner</span><span class="sv">Teal, au centre du header à la place du timer</span></div>
+            <div class="spec-row"><span class="sk">VS</span><span class="sv">Avatar gauche coloré (border <span class="tag y">p1</span>), droite neutre</span></div>
+            <div class="spec-row"><span class="sk">Annuler</span><span class="sv">Bouton sombre plein-largeur, retour Home</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 2 – ADVERSAIRE TROUVÉ
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s2">
+        <div class="screen-label"><span class="screen-num">2</span>Adversaire trouvé — Countdown</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:100%;background:var(--p2)"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">0</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">Début dans</span>
+                    <span class="ph-timer-num">3</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">marilène</span>
+                        <span class="ph-score p2">0</span>
+                    </div>
+                    <div class="ph-avatar">🐺</div>
+                </div>
+            </div>
+
+            <div class="s2-body">
+                <div class="s2-found">✓ Adversaire trouvé !</div>
+                <div class="s2-vs-row">
+                    <div class="s2-player">
+                        <div class="s2-avatar p1">🦊</div>
+                        <div class="s2-pname" style="color:var(--p1)">amandecherie</div>
+                        <div class="s2-plevel">Niveau 12 · Explorateur</div>
+                    </div>
+                    <div class="s2-vs-center">
+                        <div class="s2-vs-text">VS</div>
+                        <div class="s2-bolt">⚡</div>
+                        <div class="s2-countdown">3</div>
+                    </div>
+                    <div class="s2-player">
+                        <div class="s2-avatar p2">🐺</div>
+                        <div class="s2-pname" style="color:var(--p2)">marilène</div>
+                        <div class="s2-plevel">Niveau 18 · Chasseur</div>
+                    </div>
+                </div>
+                <div class="s2-cat-card">
+                    <div class="s2-cat-icon">🎬</div>
+                    <div>
+                        <div class="s2-cat-name">Cinéma</div>
+                        <div class="s2-cat-sub">7 questions · 20 s par question</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Barre top</span><span class="sv">Pleine, couleur p2 (vert) = adversaire prêt</span></div>
+            <div class="spec-row"><span class="sk">Countdown</span><span class="sv">3→2→1, fond rouge, animation scale</span></div>
+            <div class="spec-row"><span class="sk">⚡ bolt</span><span class="sv">Icône séparation VS / countdown</span></div>
+            <div class="spec-row"><span class="sk">Avatars</span><span class="sv">Border <span class="tag y">p1 jaune</span> / <span class="tag g">p2 vert</span></span></div>
+            <div class="spec-row"><span class="sk">Cat card</span><span class="sv">Fond sombre #111, icône rouge, nom + nb questions</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 3 – QUESTION TEXTE (4 boutons verticaux)
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s3">
+        <div class="screen-label"><span class="screen-num">3</span>Question — réponses texte</div>
+        <div class="phone">
+            <div style="position:relative">
+                <div class="side-strip-left" style="background:var(--p1)"></div>
+                <div class="side-strip-right" style="background:var(--p2)"></div>
+            </div>
+            <div class="top-bar"><div class="top-bar-fill" style="width:35%"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">19</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">TIME LEFT</span>
+                    <span class="ph-timer-num">7</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">marilène</span>
+                        <span class="ph-score p2">36</span>
+                    </div>
+                    <div class="ph-avatar">🐺</div>
+                </div>
+            </div>
+
+            <div class="question-zone">
+                <div class="question-text">Quel membre de l'Académie française a écrit « Thérèse Desqueyroux » ?</div>
+            </div>
+
+            <div class="answers-stack">
+                <div class="answer-btn-q"><div class="atext">François Mauriac</div></div>
+                <div class="answer-btn-q"><div class="atext">Jean d'Ormesson</div></div>
+                <div class="answer-btn-q"><div class="atext">Michel Butor</div></div>
+                <div class="answer-btn-q"><div class="atext">Erik Orsenna</div></div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Bande top</span><span class="sv">Timer bar teal décroit de 100% → 0% sur 20 s</span></div>
+            <div class="spec-row"><span class="sk">Header</span><span class="sv">Avatar·Nom·Score | TIME LEFT·Chiffre | Score·Nom·Avatar</span></div>
+            <div class="spec-row"><span class="sk">Scores</span><span class="sv"><span class="tag y">Jaune</span> joueur 1 / <span class="tag g">Vert</span> joueur 2</span></div>
+            <div class="spec-row"><span class="sk">Question</span><span class="sv">Blanc, ~28px, centré, flotte sur fond noir, pas de carte</span></div>
+            <div class="spec-row"><span class="sk">Réponses</span><span class="sv">4 boutons blancs en COLONNE UNIQUE, texte sombre ~20px</span></div>
+            <div class="spec-row"><span class="sk">Strips</span><span class="sv">Bandeaux 5px gauche=p1 jaune, droite=p2 vert</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 4 – QUESTION AVEC IMAGE (2×2 grid)
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s4">
+        <div class="screen-label"><span class="screen-num">4</span>Question — avec image (grille 2×2)</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:45%"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">👩</div>
+                    <div class="ph-info">
+                        <span class="ph-name">Léa Naudin</span>
+                        <span class="ph-score p1">94</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">TIEMPO RESTANTE</span>
+                    <span class="ph-timer-num">9</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">Félix Briel</span>
+                        <span class="ph-score p2">112</span>
+                    </div>
+                    <div class="ph-avatar">👨</div>
+                </div>
+            </div>
+
+            <div style="padding:8px 14px 0">
+                <div class="question-text sm" style="text-align:center">Ce crabe royal se trouve en Amérique du Sud. Quel est son nom ?</div>
+            </div>
+
+            <div class="q-image" style="margin:10px 14px 0">
+                <span style="font-size:72px">🦀</span>
+                <div class="q-image-label">Photo de l'espèce</div>
+            </div>
+
+            <div class="answers-grid2" style="padding-top:10px">
+                <div class="answer-btn-g correct">
+                    <div class="atext">Crabe royal de Patagonie</div>
+                </div>
+                <div class="answer-btn-g">
+                    <div class="atext">Metacarcinus magister</div>
+                </div>
+                <div class="answer-btn-g">
+                    <div class="atext">Grapse marbré</div>
+                </div>
+                <div class="answer-btn-g wrong">
+                    <div class="atext">Crabe à pinces rouges</div>
+                </div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Déclencheur</span><span class="sv">Question avec image → grille 2×2 au lieu de colonne</span></div>
+            <div class="spec-row"><span class="sk">Image</span><span class="sv">Border-radius 12px, ~170px de haut, entre question et réponses</span></div>
+            <div class="spec-row"><span class="sk">Grille</span><span class="sv">2 colonnes égales, gap 8px, boutons min-height 80px</span></div>
+            <div class="spec-row"><span class="sk">États révélés</span><span class="sv"><span class="tag g">Vert</span> = bonne rép · <span class="tag r">Rouge foncé</span> = mauvaise sélectionnée</span></div>
+            <div class="spec-row"><span class="sk">Texte btns</span><span class="sv">Blanc sur vert/rouge, sombre sur blanc</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 5 – RÉPONSE CHOISIE (attente adversaire)
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s5">
+        <div class="screen-label"><span class="screen-num">5</span>Réponse choisie — Attente adversaire</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:15%;background:var(--red)"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">19</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">TIME LEFT</span>
+                    <span class="ph-timer-num" style="color:var(--red)">3</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">marilène</span>
+                        <span class="ph-score p2">36</span>
+                    </div>
+                    <div class="ph-avatar">🐺</div>
+                </div>
+            </div>
+
+            <div class="question-zone">
+                <div class="question-text">Quel membre de l'Académie française a écrit « Thérèse Desqueyroux » ?</div>
+            </div>
+
+            <div class="answers-stack">
+                <div class="answer-btn-q correct p1-pick">
+                    <div class="atext">François Mauriac</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35">
+                    <div class="atext">Jean d'Ormesson</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35">
+                    <div class="atext">Michel Butor</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35">
+                    <div class="atext">Erik Orsenna</div>
+                </div>
+            </div>
+
+            <div class="waiting-bar">
+                <div class="wb-avatar">🐺</div>
+                <div class="wb-text">En attente de <b>marilène</b><span class="s1-dots"><span></span><span></span><span></span></span></div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Timer</span><span class="sv">Passe en <span class="tag r">rouge</span> quand &lt; 5s, chiffre rouge</span></div>
+            <div class="spec-row"><span class="sk">Btn sélect.</span><span class="sv">Vert + bandeau p1 gauche 5px jaune</span></div>
+            <div class="spec-row"><span class="sk">Autres btns</span><span class="sv">Blanc, opacity .35, non cliquables</span></div>
+            <div class="spec-row"><span class="sk">Waiting bar</span><span class="sv">Fond sombre bas, avatar + dots animation</span></div>
+            <div class="spec-row"><span class="sk">Transition</span><span class="sv">Auto vers écran 6 quand les 2 ont joué ou timer=0</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 6 – RÉVÉLATION DE LA RÉPONSE
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s6">
+        <div class="screen-label"><span class="screen-num">6</span>Révélation — Bonne réponse</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:0%"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">119</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">TIME LEFT</span>
+                    <span class="ph-timer-num">0</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">marilène</span>
+                        <span class="ph-score p2">136</span>
+                    </div>
+                    <div class="ph-avatar">🐺</div>
+                </div>
+            </div>
+
+            <div class="question-zone">
+                <div class="question-text">Quel membre de l'Académie française a écrit « Thérèse Desqueyroux » ?</div>
+            </div>
+
+            <div class="answers-stack">
+                <!-- Bonne rép + choisie par p1 -->
+                <div class="answer-btn-q correct p1-pick">
+                    <div class="atext">François Mauriac</div>
+                </div>
+                <!-- Non choisie -->
+                <div class="answer-btn-q" style="opacity:.35">
+                    <div class="atext">Jean d'Ormesson</div>
+                </div>
+                <!-- Choisie par p2 mais fausse -->
+                <div class="answer-btn-q wrong p2-pick">
+                    <div class="atext">Michel Butor</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35">
+                    <div class="atext">Erik Orsenna</div>
+                </div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Bonne rép.</span><span class="sv">Fond vert #27ae60, texte blanc</span></div>
+            <div class="spec-row"><span class="sk">Fausse rép.</span><span class="sv">Fond rouge foncé #7b1212, texte blanc</span></div>
+            <div class="spec-row"><span class="sk">Strip p1</span><span class="sv">Bandeau jaune 5px à gauche du bouton choisi par p1</span></div>
+            <div class="spec-row"><span class="sk">Strip p2</span><span class="sv">Bandeau vert 5px à droite du bouton choisi par p2</span></div>
+            <div class="spec-row"><span class="sk">Non choisies</span><span class="sv">Blanc, opacity .35 (ni bonne ni sélectionnée)</span></div>
+            <div class="spec-row"><span class="sk">Timer</span><span class="sv">Bar à 0, chiffre "0"</span></div>
+            <div class="spec-row"><span class="sk">Scores</span><span class="sv">Mis à jour (p1 +100, p2 +0)</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 7 – RÉSULTATS GAGNÉ
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s7">
+        <div class="screen-label"><span class="screen-num">7</span>Résultats — Gagné</div>
+        <div class="phone">
+            <div class="results-header">
+                <div style="width:28px"></div>
+                <div style="display:flex;flex-direction:column;align-items:center">
+                    <div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#555">RÉSULTATS</div>
+                    <div class="results-category">Cinéma</div>
+                </div>
+                <div class="results-close">✕</div>
+            </div>
+            <div class="results-body">
+                <div class="results-title win">GAGNÉ !</div>
+
+                <div class="results-vs-row">
+                    <div class="rv-player">
+                        <div class="rv-score p1-win">105</div>
+                        <div class="rv-avatar">🦊</div>
+                        <div class="rv-name">amandecherie</div>
+                        <div class="rv-sub" style="color:var(--p2)">Vainqueur</div>
+                        <div class="rv-sub">Niveau 1</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                        <div class="rv-bolt">⚡</div>
+                        <div style="font-size:13px;font-weight:900;color:#333">VS</div>
+                    </div>
+                    <div class="rv-player">
+                        <div class="rv-score p2-lose">103</div>
+                        <div class="rv-avatar">🐺</div>
+                        <div class="rv-name">marilène</div>
+                        <div class="rv-sub" style="color:var(--red)">Perdu</div>
+                        <div class="rv-sub">Niveau 1</div>
+                    </div>
+                </div>
+
+                <div class="score-breakdown">
+                    <div class="sb-cell gold">
+                        <div class="sb-label">Score du match</div>
+                        <div class="sb-value">105</div>
+                    </div>
+                    <div class="sb-cell green">
+                        <div class="sb-label">Bonus fin</div>
+                        <div class="sb-value">40</div>
+                    </div>
+                    <div class="sb-cell blue">
+                        <div class="sb-label">Bonus victoire</div>
+                        <div class="sb-value">50</div>
+                    </div>
+                    <div class="sb-cell purple">
+                        <div class="sb-label">Bonus boost</div>
+                        <div class="sb-value">1</div>
+                    </div>
+                    <div class="sb-cell red">
+                        <div class="sb-label">XP totale</div>
+                        <div class="sb-value">196</div>
+                    </div>
+                </div>
+
+                <div class="xp-donut-wrap">
+                    <div class="donut-container">
+                        <svg class="donut-svg" viewBox="0 0 100 100">
+                            <circle class="donut-bg" cx="50" cy="50" r="40"/>
+                            <circle class="donut-fill" cx="50" cy="50" r="40" style="stroke-dashoffset:140"/>
+                        </svg>
+                        <div class="donut-center">
+                            <span class="donut-level-label">NIVEAU</span>
+                            <span class="donut-level">1</span>
+                        </div>
+                    </div>
+                    <div class="xp-info">
+                        <div class="xp-for-next">
+                            <span>XP pour niveau 2</span>
+                            <span style="color:var(--p2)">57</span>
+                        </div>
+                        <div class="xp-gained-big">196 XP</div>
+                        <div class="xp-gained-label">XP GAGNÉE</div>
+                    </div>
+                </div>
+
+                <div class="questions-done-bar">
+                    <div class="qd-label">7 nouvelles questions complétées</div>
+                    <div class="qd-track"><div class="qd-fill" style="width:60%"></div></div>
+                </div>
+            </div>
+            <div class="results-actions">
+                <div class="ra-btn play">⚡ Jouer</div>
+                <div class="ra-btn chat">💬 Chat</div>
+                <div class="ra-btn share">↗ Partager</div>
+            </div>
+            <div class="results-details">
+                DÉTAILS
+                <div style="font-size:16px">⌄</div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Titre</span><span class="sv">"GAGNÉ !" en <span class="tag g">vert p2</span> · "PERDU !" en <span class="tag r">rouge</span></span></div>
+            <div class="spec-row"><span class="sk">Scores VS</span><span class="sv">Gagnant vert à gauche (valeur > adverse), perdant rouge</span></div>
+            <div class="spec-row"><span class="sk">⚡ bolt</span><span class="sv">Entre les deux scores/avatars</span></div>
+            <div class="spec-row"><span class="sk">Breakdown</span><span class="sv">5 cellules colorées : or·vert·bleu·violet·rouge</span></div>
+            <div class="spec-row"><span class="sk">Donut</span><span class="sv">Cercle XP progress rouge, niveau centré, XP gagnée à droite</span></div>
+            <div class="spec-row"><span class="sk">Actions</span><span class="sv">Jouer (rouge) · Chat (cyan) · Partager (or)</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 8 – RÉSULTATS PERDU
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s8">
+        <div class="screen-label"><span class="screen-num">8</span>Résultats — Perdu</div>
+        <div class="phone">
+            <div class="results-header">
+                <div style="width:28px"></div>
+                <div style="display:flex;flex-direction:column;align-items:center">
+                    <div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#555">RÉSULTATS</div>
+                    <div class="results-category">Politique française</div>
+                </div>
+                <div class="results-close">✕</div>
+            </div>
+            <div class="results-body">
+                <div class="results-title lose">PERDU !</div>
+
+                <div class="results-vs-row">
+                    <div class="rv-player">
+                        <div class="rv-score p1-lose">103</div>
+                        <div class="rv-avatar" style="border-color:#333">😐</div>
+                        <div class="rv-name">FrAndroid</div>
+                        <div class="rv-sub" style="color:var(--red)">Beginner</div>
+                        <div class="rv-sub">Niveau 1</div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+                        <div class="rv-bolt">⚡</div>
+                        <div style="font-size:13px;font-weight:900;color:#333">VS</div>
+                    </div>
+                    <div class="rv-player">
+                        <div class="rv-score p2-win">105</div>
+                        <div class="rv-avatar" style="border-color:var(--p2)">🤓</div>
+                        <div class="rv-name">Colombe Paquet</div>
+                        <div class="rv-sub" style="color:var(--p2)">Sculpture antique</div>
+                        <div class="rv-sub">Niveau 1</div>
+                    </div>
+                </div>
+
+                <div class="score-breakdown">
+                    <div class="sb-cell gold">
+                        <div class="sb-label">Score du match</div>
+                        <div class="sb-value">103</div>
+                    </div>
+                    <div class="sb-cell green">
+                        <div class="sb-label">Bonus fin</div>
+                        <div class="sb-value">40</div>
+                    </div>
+                    <div class="sb-cell blue">
+                        <div class="sb-label">Bonus victoire</div>
+                        <div class="sb-value">0</div>
+                    </div>
+                    <div class="sb-cell purple">
+                        <div class="sb-label">Bonus boost</div>
+                        <div class="sb-value">1</div>
+                    </div>
+                    <div class="sb-cell red">
+                        <div class="sb-label">XP totale</div>
+                        <div class="sb-value">143</div>
+                    </div>
+                </div>
+
+                <div class="xp-donut-wrap">
+                    <div class="donut-container">
+                        <svg class="donut-svg" viewBox="0 0 100 100">
+                            <circle class="donut-bg" cx="50" cy="50" r="40"/>
+                            <circle class="donut-fill" cx="50" cy="50" r="40" style="stroke-dashoffset:200"/>
+                        </svg>
+                        <div class="donut-center">
+                            <span class="donut-level-label">NIVEAU</span>
+                            <span class="donut-level">1</span>
+                        </div>
+                    </div>
+                    <div class="xp-info">
+                        <div class="xp-for-next">
+                            <span>XP pour niveau 2</span>
+                            <span style="color:var(--red)">57</span>
+                        </div>
+                        <div class="xp-gained-big">143 XP</div>
+                        <div class="xp-gained-label">XP GAGNÉE</div>
+                    </div>
+                </div>
+
+                <div class="questions-done-bar">
+                    <div class="qd-label">5 nouvelles questions complétées</div>
+                    <div class="qd-track"><div class="qd-fill" style="width:40%"></div></div>
+                </div>
+            </div>
+            <div class="results-actions">
+                <div class="ra-btn play">⚡ Jouer</div>
+                <div class="ra-btn chat">💬 Chat</div>
+                <div class="ra-btn share">↗ Partager</div>
+            </div>
+            <div class="results-details">DÉTAILS <div style="font-size:16px">⌄</div></div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Différence</span><span class="sv">Seul le titre change : "PERDU !" rouge · Scores inversés</span></div>
+            <div class="spec-row"><span class="sk">Vict. bonus</span><span class="sv">Bonus victoire = 0 si perdu</span></div>
+            <div class="spec-row"><span class="sk">XP</span><span class="sv">Toujours accordée même en défaite (participation + questions)</span></div>
+            <div class="spec-row"><span class="sk">Avatars</span><span class="sv">Gagnant a border p2 vert · perdant border neutre</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 9 – TIMEOUT
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s9">
+        <div class="screen-label"><span class="screen-num">9</span>Timeout — temps écoulé</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:0%"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">19</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label">TIME LEFT</span>
+                    <span class="ph-timer-num" style="color:var(--red)">0</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">marilène</span>
+                        <span class="ph-score p2">36</span>
+                    </div>
+                    <div class="ph-avatar">🐺</div>
+                </div>
+            </div>
+
+            <div class="timeout-overlay">
+                <div class="to-icon">⏱️</div>
+                <div>
+                    <div class="to-title">Temps écoulé !</div>
+                    <div class="to-sub">Aucun point attribué pour cette question</div>
+                </div>
+            </div>
+
+            <div style="padding: 8px 14px 0">
+                <div class="question-text sm" style="text-align:center">Quel membre de l'Académie française a écrit « Thérèse Desqueyroux » ?</div>
+            </div>
+
+            <div class="answers-stack" style="gap:7px;padding-top:14px">
+                <div class="answer-btn-q correct" style="min-height:60px">
+                    <div class="atext">François Mauriac</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35;min-height:60px">
+                    <div class="atext">Jean d'Ormesson</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35;min-height:60px">
+                    <div class="atext">Michel Butor</div>
+                </div>
+                <div class="answer-btn-q" style="opacity:.35;min-height:60px">
+                    <div class="atext">Erik Orsenna</div>
+                </div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Timer</span><span class="sv">Barre à 0%, chiffre rouge "0"</span></div>
+            <div class="spec-row"><span class="sk">Banner</span><span class="sv">Bandeau rouge translucide "Temps écoulé"</span></div>
+            <div class="spec-row"><span class="sk">Bonne rép.</span><span class="sv">Révélée en vert même si personne n'a répondu</span></div>
+            <div class="spec-row"><span class="sk">Autres</span><span class="sv">Blanc opacity .35</span></div>
+            <div class="spec-row"><span class="sk">Scores</span><span class="sv">Inchangés (+0)</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 10 – FORFAIT ADVERSAIRE
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s10">
+        <div class="screen-label"><span class="screen-num">10</span>Forfait — adversaire déconnecté</div>
+        <div class="phone">
+            <div class="top-bar"><div class="top-bar-fill" style="width:100%;background:var(--p2)"></div></div>
+            <div class="player-header">
+                <div class="ph-player">
+                    <div class="ph-avatar">🦊</div>
+                    <div class="ph-info">
+                        <span class="ph-name">amandecherie</span>
+                        <span class="ph-score p1">57</span>
+                    </div>
+                </div>
+                <div class="ph-center">
+                    <span class="ph-timer-label" style="color:var(--p2)">FORFAIT</span>
+                    <span style="font-size:22px">🚪</span>
+                </div>
+                <div class="ph-player right">
+                    <div class="ph-info" style="align-items:flex-end">
+                        <span class="ph-name">marilène</span>
+                        <span class="ph-score" style="color:#333">32</span>
+                    </div>
+                    <div class="ph-avatar" style="opacity:.3">🐺</div>
+                </div>
+            </div>
+
+            <div class="forfeit-body">
+                <div class="forfeit-icon">🚪</div>
+                <div class="forfeit-title">marilène a quitté la partie</div>
+                <div class="forfeit-sub">Victoire par forfait !<br>Tu reçois les XP complètes.</div>
+                <div class="forfeit-xp">+196 XP</div>
+                <div class="forfeit-xp-label">Victoire par forfait</div>
+                <div style="width:100%;background:#111;border:1px solid #222;border-radius:14px;padding:16px;text-align:center">
+                    <div style="font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#444;margin-bottom:10px">Au moment de l'abandon</div>
+                    <div style="display:flex;justify-content:center;align-items:center;gap:24px">
+                        <div style="text-align:center">
+                            <div style="font-size:24px;font-weight:900;color:var(--p1)">57</div>
+                            <div style="font-size:10px;color:#444">Toi · Q4</div>
+                        </div>
+                        <div style="font-size:14px;font-weight:900;color:#333">VS</div>
+                        <div style="text-align:center">
+                            <div style="font-size:24px;font-weight:900;color:#333">32</div>
+                            <div style="font-size:10px;color:#444">marilène</div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:8px;width:100%">
+                    <div class="ra-btn play" style="flex:2">⚡ Nouvelle partie</div>
+                    <div class="ra-btn" style="background:#111;border:1px solid #222;color:#555;flex:1">🏠</div>
+                </div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Délai</span><span class="sv">10 s de grâce réseau avant déclaration forfait</span></div>
+            <div class="spec-row"><span class="sk">Adversaire</span><span class="sv">Avatar et score grisés dans le header</span></div>
+            <div class="spec-row"><span class="sk">XP</span><span class="sv">Accordé comme une victoire complète</span></div>
+            <div class="spec-row"><span class="sk">Résumé</span><span class="sv">Score au moment du départ + numéro de question</span></div>
+            <div class="spec-row"><span class="sk">Action</span><span class="sv">Pas de "Revanche" → "Nouvelle partie" uniquement</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+      SCREEN 11 – PAGE CATÉGORIE
+    ══════════════════════════════════════════ -->
+    <div class="screen-wrap" id="s11">
+        <div class="screen-label"><span class="screen-num">11</span>Page Catégorie</div>
+        <div class="phone">
+            <div class="cat-page-header">
+                <div class="cat-header-icon">✏️</div>
+                <div class="cat-header-title">Politique franç…</div>
+                <div class="cat-header-icons">
+                    <span>🔍</span>
+                    <span>💬</span>
+                </div>
+            </div>
+
+            <div class="cat-body">
+                <div class="cat-main-row">
+                    <div class="cat-img">🗳️</div>
+                    <div class="cat-action-col">
+                        <div class="cat-action-btn play">⚡ Jouer</div>
+                        <div class="cat-action-btn unfollow">⊖ Ne plus suivre</div>
+                        <div class="cat-action-btn ranking">🏆 Classements</div>
+                    </div>
+                </div>
+
+                <div style="padding:0 16px 6px">
+                    <div style="font-size:16px;font-weight:900">Politique française</div>
+                    <div style="font-size:13px;color:#555;margin-top:2px">L'État, c'est eux.</div>
+                </div>
+
+                <div class="cat-divider"></div>
+
+                <div class="cat-questions-section">
+                    <div class="cat-section-title">Questions complétées</div>
+                    <div class="cat-progress-bar-track">
+                        <div class="cat-progress-bar-fill">0%</div>
+                    </div>
+                </div>
+
+                <div class="cat-divider"></div>
+
+                <div class="cat-stats-row">
+                    <div class="cat-stat">
+                        <div class="cat-stat-label">Votre niveau</div>
+                        <div class="cat-stat-val">1</div>
+                    </div>
+                    <div class="cat-divider-v"></div>
+                    <div class="cat-stat">
+                        <div class="cat-stat-label">Abonnés</div>
+                        <div class="cat-stat-val">5 972</div>
+                    </div>
+                    <div class="cat-divider-v"></div>
+                    <div class="cat-stat">
+                        <div class="cat-stat-label">Titre suivant niv.</div>
+                        <div class="cat-stat-val" style="font-size:16px">Niv. 10</div>
+                        <div class="cat-stat-num">Député</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-nav">
+                <div class="bn-item">
+                    <div class="bn-icon">🏠</div>
+                    <div class="bn-label">Accueil</div>
+                </div>
+                <div class="bn-item">
+                    <div class="bn-icon">👥</div>
+                    <div class="bn-label">Personnes</div>
+                </div>
+                <div class="bn-item">
+                    <div class="bn-play-btn">⚡</div>
+                </div>
+                <div class="bn-item">
+                    <div class="bn-icon">⊞</div>
+                    <div class="bn-label">Thèmes</div>
+                </div>
+                <div class="bn-item active">
+                    <div class="bn-icon">🔔</div>
+                    <div class="bn-label">Activité</div>
+                </div>
+            </div>
+        </div>
+        <div class="spec-box">
+            <h4>Spécifications</h4>
+            <div class="spec-row"><span class="sk">Header</span><span class="sv">Rouge <span class="tag r">#e53935</span> · icône crayon + titre tronqué + search + chat</span></div>
+            <div class="spec-row"><span class="sk">Image cat.</span><span class="sv">Carré 88px, radius 12px</span></div>
+            <div class="spec-row"><span class="sk">Btns action</span><span class="sv">Jouer rouge · Unfollow sombre · Classements violet</span></div>
+            <div class="spec-row"><span class="sk">Progress</span><span class="sv">Barre sombre 28px de haut, texte "0%" dedans</span></div>
+            <div class="spec-row"><span class="sk">Stats</span><span class="sv">Niveau · Abonnés · Prochain titre en 3 colonnes</span></div>
+            <div class="spec-row"><span class="sk">Bottom nav</span><span class="sv">5 items · bouton ⚡ rouge flottant au centre</span></div>
+        </div>
+    </div>
+
+</div><!-- /screens-grid -->
+
+<script>
+    function goTo(id, btn) {
+        document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+    window.addEventListener('scroll', () => {
+        const ids = ['s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11'];
+        const btns = document.querySelectorAll('.nav-btn');
+        let cur = 0;
+        ids.forEach((id,i) => {
+            const el = document.getElementById(id);
+            if(el && window.scrollY >= el.offsetTop - 100) cur = i;
+        });
+        btns.forEach((b,i) => b.classList.toggle('active', i===cur));
+    });
+</script>
+</body>
+</html>
