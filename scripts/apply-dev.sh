@@ -5,6 +5,9 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 WORKSPACE_FILE="${ROOT_DIR}/workspace.yml"
 SESSION_FILE="${ROOT_DIR}/.dev-session.env"
 
+# shellcheck source=/dev/null
+source "${ROOT_DIR}/scripts/lib/prompt.sh"
+
 TYPE="${TYPE:-}"
 DESC="${DESC:-}"
 REPOS_CSV="${REPOS:-}"
@@ -92,8 +95,8 @@ prompt_type() {
 
 prompt_desc() {
   while true; do
-    read -r -p "Enter commit description: " raw
-    raw="$(echo "$raw" | xargs)"
+    read_prompt "Enter commit description: " raw
+    raw="$(trim_whitespace "$raw")"
     if [[ -n "$raw" ]]; then
       DESC="$raw"
       break
@@ -138,8 +141,8 @@ prompt_repos() {
     local selection old_ifs valid idx repo
     local -a idxs picked
 
-    read -r -p "Choice (0 or comma-separated numbers): " selection
-    selection="$(echo "$selection" | xargs)"
+    read_prompt "Choice (0 or comma-separated numbers): " selection
+    selection="$(trim_whitespace "$selection")"
     if [[ "$selection" == "0" ]]; then
       select_all_repos
       return
@@ -153,7 +156,7 @@ prompt_repos() {
     picked=()
     TARGET_REPOS=()
     for idx in "${idxs[@]}"; do
-      idx="$(echo "$idx" | xargs)"
+      idx="$(trim_whitespace "$idx")"
       if ! [[ "$idx" =~ ^[0-9]+$ ]]; then
         valid=false
         break

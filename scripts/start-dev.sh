@@ -5,6 +5,9 @@ ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 WORKSPACE_FILE="${ROOT_DIR}/workspace.yml"
 SESSION_FILE="${ROOT_DIR}/.dev-session.env"
 
+# shellcheck source=/dev/null
+source "${ROOT_DIR}/scripts/lib/prompt.sh"
+
 TYPE="${TYPE:-}"
 SCOPE="${SCOPE:-}"
 FEATURE="${FEATURE:-}"
@@ -31,7 +34,7 @@ is_valid_type() {
 }
 
 slugify() {
-  echo "$1" \
+  sanitize_input "$1" \
     | tr '[:upper:]' '[:lower:]' \
     | sed -E 's/[[:space:]_]+/-/g; s/[^a-z0-9.-]+/-/g; s/-+/-/g; s/^-+//; s/-+$//'
 }
@@ -97,7 +100,7 @@ prompt_type() {
 
 prompt_scope() {
   while true; do
-    read -r -p "Enter scope (example: profiles): " raw
+    read_prompt "Enter scope (example: profiles): " raw
     SCOPE="$(slugify "$raw")"
     if [[ -n "$SCOPE" ]] && is_valid_fragment "$SCOPE"; then
       break
@@ -108,7 +111,7 @@ prompt_scope() {
 
 prompt_feature() {
   while true; do
-    read -r -p "Enter feature name (example: spring-profiles-rollout): " raw
+    read_prompt "Enter feature name (example: spring-profiles-rollout): " raw
     FEATURE="$(slugify "$raw")"
     if [[ -n "$FEATURE" ]] && is_valid_fragment "$FEATURE"; then
       break
@@ -119,8 +122,8 @@ prompt_feature() {
 
 prompt_desc() {
   while true; do
-    read -r -p "Enter commit description (example: add spring profiles rollout): " raw
-    raw="$(echo "$raw" | xargs)"
+    read_prompt "Enter commit description (example: add spring profiles rollout): " raw
+    raw="$(trim_whitespace "$raw")"
     if [[ -n "$raw" ]]; then
       DEV_DESC="$raw"
       break
@@ -165,8 +168,8 @@ prompt_repos() {
     local selection old_ifs valid idx repo
     local -a idxs picked
 
-    read -r -p "Choice (0 or comma-separated numbers): " selection
-    selection="$(echo "$selection" | xargs)"
+    read_prompt "Choice (0 or comma-separated numbers): " selection
+    selection="$(trim_whitespace "$selection")"
     if [[ "$selection" == "0" ]]; then
       select_all_repos
       return
@@ -180,7 +183,7 @@ prompt_repos() {
     picked=()
     TARGET_REPOS=()
     for idx in "${idxs[@]}"; do
-      idx="$(echo "$idx" | xargs)"
+      idx="$(trim_whitespace "$idx")"
       if ! [[ "$idx" =~ ^[0-9]+$ ]]; then
         valid=false
         break

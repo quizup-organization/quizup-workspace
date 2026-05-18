@@ -19,6 +19,7 @@ Regles:
 - echec si la branche existe deja en local ou sur origin
 - echec si le repo contient des changements locaux
 - enregistre une session locale dans `.dev-session.env` (fichier ignore par git)
+- les saisies interactives sont nettoyees (sequences ANSI/fleches et caracteres de controle) pour eviter les suffixes parasites
 
 Mode interactif:
 
