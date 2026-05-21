@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>S7 — Paramètres · QuizUp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+
+        /* ═══════════════════════════════════════════════
+           TOKENS
+        ═══════════════════════════════════════════════ */
+        :root{
+            --bg:       #000;
+            --bg1:      #0d0d0d;
+            --bg2:      #111;
+            --bg3:      #1a1a1a;
+            --white:    #fff;
+            --y:        #e8b000;
+            --g:        #27ae60;
+            --r:        #e53935;
+            --bw:       #7b1212;
+            --teal:     #00bcd4;
+            --teal-dk:  #006d7a;
+            --muted:    #444;
+            --muted2:   #333;
+            --muted3:   #222;
+            --notch:    22px;
+            --font:     'Nunito',sans-serif;
+            --phone-w:  375px;
+            --phone-h:  812px;
+        }
+
+        /* ── BASE ────────────────────────────────────── */
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{background:#111;font-family:var(--font);color:#fff;
+            display:flex;flex-direction:column;align-items:center;
+            min-height:100vh;padding:28px 16px 80px}
+        a{color:inherit;text-decoration:none}
+
+        /* ── PAGE TITLE ──────────────────────────────── */
+        .page-title{text-align:center;margin-bottom:30px}
+        .page-title h1{font-size:21px;font-weight:900}
+        .page-title p{font-size:12px;color:var(--muted);margin-top:4px}
+        .badge{display:inline-block;background:var(--teal);color:#000;font-size:10px;
+            font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+            padding:3px 10px;border-radius:20px;margin-bottom:8px}
+
+        /* ── NAV ─────────────────────────────────────── */
+        .nav-bar{position:sticky;top:0;z-index:100;background:rgba(0,0,0,.96);
+            backdrop-filter:blur(10px);border-bottom:1px solid var(--bg3);
+            padding:8px 4px;margin-bottom:36px;width:100%;
+            display:flex;justify-content:center;flex-wrap:wrap;gap:5px}
+        .nav-section{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+        .nav-sep{width:1px;background:var(--bg3);margin:0 4px;align-self:stretch}
+        .nav-btn{background:var(--bg3);border:1px solid var(--muted3);color:var(--muted);
+            font-size:10px;font-family:var(--font);font-weight:700;
+            padding:4px 10px;border-radius:20px;cursor:pointer;white-space:nowrap}
+        .nav-btn:hover,.nav-btn.active{background:var(--r);border-color:var(--r);color:#fff}
+        .nav-category{font-size:9px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
+            color:var(--muted);padding:4px 6px;align-self:center}
+
+        /* ── GRID ────────────────────────────────────── */
+        .screens-grid{display:flex;flex-wrap:wrap;gap:44px;
+            justify-content:center;align-items:flex-start;max-width:1900px}
+        .section-title{width:100%;text-align:center;font-size:11px;font-weight:900;
+            letter-spacing:3px;text-transform:uppercase;color:var(--muted);
+            padding:12px 0 4px;border-bottom:1px solid var(--bg3);margin-bottom:8px}
+
+        /* ── PHONE FRAME ─────────────────────────────── */
+        .screen-wrap{display:flex;flex-direction:column;align-items:center;
+            gap:12px;scroll-margin-top:80px}
+        .screen-label{font-size:10px;font-weight:800;letter-spacing:2px;
+            text-transform:uppercase;color:var(--muted)}
+        .sn{display:inline-flex;align-items:center;justify-content:center;
+            width:20px;height:20px;border-radius:50%;background:var(--r);
+            color:#fff;font-size:10px;font-weight:900;margin-right:5px}
+        .phone{width:var(--phone-w);height:var(--phone-h);background:var(--bg);
+            border-radius:40px;border:2px solid #1e1e1e;
+            box-shadow:0 12px 48px rgba(0,0,0,.85),0 0 0 1px #2a2a2a;
+            overflow:hidden;position:relative;display:flex;flex-direction:column}
+        .phone::before{content:'';position:absolute;top:0;left:50%;
+            transform:translateX(-50%);width:90px;height:24px;background:#000;
+            border-radius:0 0 14px 14px;z-index:40}
+
+        /* ── SPEC BOX ────────────────────────────────── */
+        .spec-box{width:var(--phone-w);background:var(--bg1);border:1px solid var(--bg3);
+            border-radius:12px;padding:14px 16px;font-size:11px;color:var(--muted);line-height:1.85}
+        .spec-box h4{font-size:10px;font-weight:900;letter-spacing:2px;
+            text-transform:uppercase;color:var(--teal);margin-bottom:8px}
+        .sr{display:flex;gap:8px}.sk{color:#888;font-weight:700;min-width:90px;flex-shrink:0}
+        .tag{display:inline-block;font-size:9px;font-weight:900;padding:1px 7px;border-radius:6px}
+        .ty{background:rgba(232,176,0,.2);color:var(--y)}
+        .tg{background:rgba(39,174,96,.15);color:var(--g)}
+        .tr{background:rgba(229,57,53,.15);color:var(--r)}
+        .tt{background:rgba(0,188,212,.15);color:var(--teal)}
+
+        /* ═══════════════════════════════════════════════
+           COMPOSANTS PARTAGÉS
+        ═══════════════════════════════════════════════ */
+
+        /* Timer bar */
+        .timer-bar{height:6px;width:100%;background:#000;flex-shrink:0;
+            position:relative;overflow:hidden;z-index:10}
+        .tb-fill{position:absolute;left:0;top:0;bottom:0;background:var(--teal)}
+        .tb-answered{position:absolute;top:0;bottom:0;background:var(--teal-dk)}
+
+        /* Barres latérales */
+        .side-bars{position:absolute;left:0;right:0;pointer-events:none;z-index:5}
+        .side-bar{position:absolute;bottom:0;width:7px;border-radius:3px 3px 0 0}
+        .sb-l{left:0}.sb-r{right:0}
+        .sb-y{background:var(--y)}.sb-g{background:var(--g)}.sb-r2{background:var(--r)}
+
+        /* Header joueurs */
+        .ph{display:flex;align-items:center;padding:28px 10px 5px;
+            flex-shrink:0;position:relative;z-index:10}
+        .ph-p{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+        .ph-p.rr{flex-direction:row-reverse}
+        .ph-av{width:44px;height:44px;border-radius:50%;background:var(--bg3);
+            border:2px solid var(--muted3);display:flex;align-items:center;
+            justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden}
+        .ph-info{display:flex;flex-direction:column;min-width:0}
+        .ph-name{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .ph-score{font-size:20px;font-weight:900;line-height:1.05}
+        .sc-y{color:var(--y)}.sc-g{color:var(--g)}.sc-r{color:var(--r)}
+        .ph-center{display:flex;flex-direction:column;align-items:center;flex-shrink:0;min-width:66px}
+        .ph-tlbl{font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal)}
+        .ph-tnum{font-size:28px;font-weight:900;line-height:1}
+
+        /* Boutons réponse colonne */
+        .answers-col{display:flex;flex-direction:column;gap:7px;
+            padding:10px 12px 18px;flex-shrink:0;position:relative;z-index:10}
+        .ans{background:var(--white);border-radius:14px;min-height:72px;
+            display:flex;align-items:center;justify-content:center;
+            padding:12px 18px;cursor:pointer;position:relative}
+        .ans .at{font-family:var(--font);font-size:19px;font-weight:700;
+            color:#1a1a1a;text-align:center;line-height:1.25}
+        .ans.correct{background:var(--g)}.ans.correct .at{color:#fff}
+        .ans.wrong-ans{background:var(--bw)}.ans.wrong-ans .at{color:#fff}
+        .notch-p1{clip-path:polygon(0 0,100% 0,100% 100%,var(--notch) 100%,0 calc(100% - var(--notch)))}
+        .notch-p2{clip-path:polygon(0 0,100% 0,100% calc(100% - var(--notch)),calc(100% - var(--notch)) 100%,0 100%)}
+        .notch-both{clip-path:polygon(0 0,100% 0,100% calc(100% - var(--notch)),calc(100% - var(--notch)) 100%,var(--notch) 100%,0 calc(100% - var(--notch)))}
+
+        /* Boutons réponse grille */
+        .answers-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;
+            padding:7px 12px 16px;flex-shrink:0;position:relative;z-index:10}
+        .ans-g{background:var(--white);border-radius:14px;height:88px;
+            display:flex;align-items:center;justify-content:center;
+            padding:10px 14px;cursor:pointer;position:relative}
+        .ans-g .at{font-family:var(--font);font-size:15px;font-weight:700;
+            color:#1a1a1a;text-align:center;line-height:1.3}
+        .ans-g.correct{background:var(--g)}.ans-g.correct .at{color:#fff}
+        .ans-g.wrong-ans{background:var(--bw)}.ans-g.wrong-ans .at{color:#fff}
+
+        /* Image question */
+        .q-img{flex:1;margin:6px 12px;border-radius:12px;overflow:hidden;
+            background:var(--bg1);display:flex;align-items:center;justify-content:center;
+            font-size:80px;min-height:0;position:relative;z-index:10}
+
+        /* Question zone */
+        .q-zone{display:flex;align-items:center;justify-content:center;
+            padding:16px 20px 8px;position:relative;z-index:10}
+        .q-text{font-size:27px;font-weight:800;color:#fff;text-align:center;line-height:1.3}
+        .q-text.sm{font-size:21px}
+
+        /* Bottom nav */
+        .bottom-nav{display:flex;background:#080808;border-top:1px solid #0d0d0d;flex-shrink:0}
+        .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;
+            justify-content:center;padding:10px 0 12px;gap:4px;cursor:pointer}
+        .bn-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted3)}
+        .bn-lbl.active{color:var(--r)}
+        .bn-icon{font-size:18px}
+        .bn-play{width:52px;height:52px;border-radius:50%;background:var(--r);
+            display:flex;align-items:center;justify-content:center;font-size:22px;
+            margin-top:-16px;box-shadow:0 0 0 4px #080808}
+
+        /* ── SIDE BARS SCORE ─────────────────────────────── */
+        .side-bar{transition:height .4s ease, background .3s ease}
+        .sb-score-green{background:var(--g)!important}
+        .sb-score-yellow{background:var(--y)!important}
+
+        /* ── RESPONSIVE — Tablet & Desktop ──────────────── */
+        @media(min-width:768px){
+            body{padding:36px 24px 100px}
+            .screens-grid{gap:56px}
+            .phone{--phone-w:390px;--phone-h:844px}
+            .spec-box{width:390px}
+            .nav-bar{padding:10px 8px}
+            .nav-btn{font-size:11px;padding:5px 13px}
+        }
+        @media(min-width:1200px){
+            body{padding:44px 48px 120px}
+            .screens-grid{gap:72px}
+            .phone{--phone-w:393px;--phone-h:852px}
+            .spec-box{width:393px}
+            :root{--phone-w:393px;--phone-h:852px}
+            .nav-bar{padding:10px 16px;gap:8px}
+            .nav-btn{font-size:11px;padding:5px 14px}
+            .page-title h1{font-size:26px}
+            .page-title p{font-size:13px}
+            .section-title{font-size:12px}
+        }
+
+        /* Résultats */
+        .res-head{padding:32px 16px 8px;display:flex;align-items:center;
+            justify-content:space-between;flex-shrink:0}
+        .res-close{width:28px;height:28px;border-radius:50%;background:var(--bg2);
+            border:1px solid var(--bg3);display:flex;align-items:center;
+            justify-content:center;font-size:14px;color:var(--muted);cursor:pointer}
+        .res-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;
+            align-items:center;padding:0 16px 10px;gap:11px}
+        .res-title{font-size:42px;font-weight:900;letter-spacing:-1px;line-height:1}
+        .res-title.win{color:var(--g)}.res-title.lose{color:var(--r)}
+        .rv-row{display:flex;align-items:center;justify-content:center;gap:12px;width:100%}
+        .rv-p{display:flex;flex-direction:column;align-items:center;gap:5px}
+        .rv-score{font-size:30px;font-weight:900}
+        .rv-score.win{color:var(--g)}.rv-score.lose{color:var(--r)}
+        .rv-av{width:72px;height:72px;border-radius:50%;background:var(--bg3);
+            border:3px solid var(--muted3);display:flex;align-items:center;justify-content:center;font-size:32px}
+        .rv-av.wr{border-color:var(--g)}
+        .rv-name{font-size:13px;font-weight:700}.rv-sub{font-size:11px;color:var(--muted)}
+        .sb-row{display:flex;gap:5px;width:100%}
+        .sb-cell{flex:1;border-radius:10px;padding:7px 3px;display:flex;flex-direction:column;align-items:center;gap:3px}
+        .sb-cell.go{background:rgba(232,176,0,.15)}.sb-cell.gn{background:rgba(39,174,96,.12)}
+        .sb-cell.bl{background:rgba(0,188,212,.12)}.sb-cell.pu{background:rgba(124,77,255,.12)}
+        .sb-cell.rd{background:rgba(229,57,53,.12)}
+        .sb-lbl{font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+            color:var(--muted);text-align:center;line-height:1.3}
+        .sb-val{font-size:18px;font-weight:900;line-height:1}
+        .sb-cell.go .sb-val{color:var(--y)}.sb-cell.gn .sb-val{color:var(--g)}
+        .sb-cell.bl .sb-val{color:var(--teal)}.sb-cell.pu .sb-val{color:#7c4dff}.sb-cell.rd .sb-val{color:var(--r)}
+        .donut-wrap{display:flex;align-items:center;gap:16px;width:100%}
+        .donut-c{position:relative;width:110px;height:110px;flex-shrink:0}
+        .donut-svg{width:110px;height:110px;transform:rotate(-90deg)}
+        .donut-bg{fill:none;stroke:var(--bg3);stroke-width:12}
+        .donut-fill{fill:none;stroke:var(--r);stroke-width:12;stroke-linecap:round;stroke-dasharray:283}
+        .donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .donut-lv-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+        .donut-lv{font-size:22px;font-weight:900;line-height:1}
+        .xp-info{flex:1;display:flex;flex-direction:column;gap:5px}
+        .xp-row{font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+        .xp-big{font-size:24px;font-weight:900;color:var(--r)}
+        .xp-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+        .qd-lbl{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2);margin-bottom:6px}
+        .qd-track{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+        .qd-fill{height:100%;background:var(--r);border-radius:4px}
+        .res-actions{display:flex;gap:8px;width:100%;padding:4px 16px 12px;flex-shrink:0}
+        .ra-btn{flex:1;padding:14px 8px;border-radius:12px;text-align:center;
+            font-size:14px;font-weight:800;color:#fff;cursor:pointer;
+            display:flex;align-items:center;justify-content:center;gap:5px}
+        .ra-btn.play{background:var(--r)}.ra-btn.chat{background:var(--teal)}.ra-btn.share{background:#f5a623}
+        .res-details{text-align:center;font-size:11px;color:var(--muted2);padding-bottom:8px;
+            cursor:pointer;display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+
+        /* Matchmaking / Found */
+        .mm-body,.found-body{flex:1;display:flex;flex-direction:column;align-items:center;
+            justify-content:space-evenly;padding:40px 22px 28px}
+        .mm-cat{background:var(--r);color:#fff;font-size:13px;font-weight:800;padding:7px 22px;border-radius:20px}
+        .mm-vs-row,.found-vs-row{display:flex;align-items:center;gap:14px;width:100%}
+        .mm-player,.found-player{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px}
+        .mm-av,.found-av{width:84px;height:84px;border-radius:50%;background:var(--bg1);
+            display:flex;align-items:center;justify-content:center;font-size:38px;border:3px solid}
+        .mm-name,.found-pname{font-size:14px;font-weight:800}
+        .mm-sub,.found-plevel{font-size:11px;color:var(--muted)}
+        .mm-spinner{width:34px;height:34px;border:3px solid var(--bg3);
+            border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .dots span{display:inline-block;width:4px;height:4px;background:var(--muted2);
+            border-radius:50%;animation:blink 1.4s infinite;margin:0 2px}
+        .dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+        @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+        .cancel-btn{width:100%;padding:15px;border-radius:14px;background:var(--bg2);
+            border:1px solid var(--bg3);text-align:center;font-size:16px;font-weight:700;color:var(--muted)}
+        .found-cd{width:64px;height:64px;border-radius:50%;background:var(--r);
+            display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900}
+        .found-cat-card{width:100%;background:var(--bg1);border:1px solid var(--bg3);
+            border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px}
+        .found-cat-icon{width:52px;height:52px;border-radius:12px;background:var(--r);
+            display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+        .found-cat-name{font-size:17px;font-weight:800}
+        .found-cat-sub{font-size:12px;color:var(--muted);margin-top:3px}
+
+        /* ═══════════════════════════════════════════════
+           ÉCRANS SPÉCIFIQUES
+        ═══════════════════════════════════════════════ */
+
+        /* ─── ONBOARDING ─ */
+        .ob-bg{flex:1;background:linear-gradient(170deg,#1a0000 0%,#000 60%);
+            display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;
+            padding:50px 24px 32px}
+        .ob-logo{font-size:52px;filter:drop-shadow(0 0 24px rgba(229,57,53,.6))}
+        .ob-app-name{font-size:36px;font-weight:900;letter-spacing:-1px}
+        .ob-tagline{font-size:15px;color:var(--muted);text-align:center;line-height:1.5}
+        .ob-cta{width:100%;padding:17px;border-radius:14px;background:var(--r);
+            text-align:center;font-size:17px;font-weight:900;color:#fff}
+        .ob-secondary{font-size:13px;color:var(--muted);text-align:center}
+        .ob-or{display:flex;align-items:center;gap:10px;width:100%}
+        .ob-or-line{flex:1;height:1px;background:var(--bg3)}
+        .ob-or-text{font-size:11px;color:var(--muted)}
+        .ob-social-btn{width:100%;padding:14px;border-radius:14px;
+            background:var(--bg2);border:1px solid var(--bg3);
+            text-align:center;font-size:15px;font-weight:700;color:#fff;
+            display:flex;align-items:center;justify-content:center;gap:10px}
+
+        /* ─── HOME ─ */
+        .home-header{padding:30px 16px 12px;display:flex;align-items:center;
+            justify-content:space-between;flex-shrink:0}
+        .home-av-row{display:flex;align-items:center;gap:10px}
+        .home-av{width:40px;height:40px;border-radius:50%;background:var(--bg3);
+            border:2px solid var(--y);display:flex;align-items:center;justify-content:center;font-size:20px}
+        .home-greeting{font-size:11px;color:var(--muted)}
+        .home-username{font-size:15px;font-weight:900}
+        .home-notif-btn{width:36px;height:36px;border-radius:50%;background:var(--bg2);
+            border:1px solid var(--bg3);display:flex;align-items:center;justify-content:center;
+            position:relative}
+        .home-notif-dot{position:absolute;top:4px;right:4px;width:8px;height:8px;
+            border-radius:50%;background:var(--r);border:2px solid var(--bg)}
+
+        .home-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:0}
+        .home-section-lbl{font-size:9px;font-weight:900;letter-spacing:2px;
+            text-transform:uppercase;color:var(--muted);padding:12px 16px 8px}
+
+        /* XP bar */
+        .home-xp-bar{margin:0 16px 4px;background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:12px;padding:12px 14px}
+        .home-xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+        .home-xp-level{font-size:13px;font-weight:900;color:var(--y)}
+        .home-xp-next{font-size:11px;color:var(--muted)}
+        .home-xp-track{height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
+        .home-xp-fill{height:100%;background:linear-gradient(90deg,var(--y),var(--r));border-radius:4px}
+
+        /* Play button hero */
+        .home-play-hero{margin:10px 16px;background:var(--r);border-radius:18px;
+            padding:20px 24px;display:flex;align-items:center;justify-content:space-between;
+            cursor:pointer}
+        .home-play-text{font-size:22px;font-weight:900}
+        .home-play-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:2px}
+        .home-play-icon{font-size:36px}
+
+        /* Challenges pending */
+        .challenge-card{margin:0 16px 8px;background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px}
+        .challenge-av{width:42px;height:42px;border-radius:50%;background:var(--bg3);
+            display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+            border:2px solid var(--y)}
+        .challenge-info{flex:1}
+        .challenge-name{font-size:14px;font-weight:800}
+        .challenge-meta{font-size:11px;color:var(--muted);margin-top:2px}
+        .challenge-badge{background:var(--r);color:#fff;font-size:11px;font-weight:900;
+            padding:6px 14px;border-radius:20px;cursor:pointer;flex-shrink:0}
+
+        /* Topics horiz scroll */
+        .topics-scroll{display:flex;gap:10px;padding:0 16px 12px;overflow-x:auto}
+        .topics-scroll::-webkit-scrollbar{display:none}
+        .topic-chip{flex-shrink:0;background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:14px;padding:10px 14px;display:flex;flex-direction:column;
+            align-items:center;gap:6px;width:90px;cursor:pointer}
+        .topic-chip-icon{font-size:26px}
+        .topic-chip-name{font-size:10px;font-weight:700;text-align:center;line-height:1.2}
+
+        /* ─── PROFIL ─ */
+        .profile-header{padding:32px 16px 0;display:flex;flex-direction:column;
+            align-items:center;gap:8px;flex-shrink:0}
+        .profile-av{width:80px;height:80px;border-radius:50%;background:var(--bg3);
+            border:3px solid var(--y);display:flex;align-items:center;justify-content:center;font-size:38px}
+        .profile-name{font-size:20px;font-weight:900}
+        .profile-title{font-size:12px;color:var(--y);font-weight:700}
+        .profile-level{font-size:11px;color:var(--muted)}
+
+        .profile-xp{margin:12px 16px 0;background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:12px;padding:12px 14px;flex-shrink:0}
+        .profile-xp-track{height:10px;background:var(--bg3);border-radius:5px;
+            overflow:hidden;margin-top:6px}
+        .profile-xp-fill{height:100%;background:linear-gradient(90deg,var(--y),var(--r));border-radius:5px}
+
+        .profile-stats{display:flex;gap:0;margin:10px 16px 0;flex-shrink:0}
+        .profile-stat{flex:1;text-align:center;background:var(--bg2);border:1px solid var(--bg3);
+            padding:12px 0}
+        .profile-stat:first-child{border-radius:12px 0 0 12px}
+        .profile-stat:last-child{border-radius:0 12px 12px 0}
+        .profile-stat+.profile-stat{border-left:none}
+        .profile-stat-val{font-size:20px;font-weight:900}
+        .profile-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;
+            letter-spacing:1px;font-weight:700;margin-top:2px}
+
+        .profile-badges{padding:12px 16px 0;flex-shrink:0}
+        .badges-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+        .badge-item{width:52px;height:52px;border-radius:12px;background:var(--bg2);
+            border:1px solid var(--bg3);display:flex;align-items:center;justify-content:center;font-size:24px}
+        .badge-item.earned{border-color:var(--y);background:rgba(232,176,0,.08)}
+        .badge-item.locked{opacity:.3}
+
+        .profile-history{flex:1;overflow-y:auto;padding:12px 16px 0}
+        .history-item{display:flex;align-items:center;gap:10px;
+            padding:10px 0;border-bottom:1px solid var(--bg3)}
+        .hi-av{width:36px;height:36px;border-radius:50%;background:var(--bg3);
+            display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+        .hi-info{flex:1}
+        .hi-name{font-size:13px;font-weight:700}
+        .hi-meta{font-size:11px;color:var(--muted);margin-top:1px}
+        .hi-result{font-size:18px;font-weight:900}
+        .hi-result.win{color:var(--g)}.hi-result.lose{color:var(--r)}
+
+        /* ─── THÈMES BROWSER ─ */
+        .themes-header{background:var(--r);padding:32px 16px 14px;
+            display:flex;align-items:center;gap:10px;flex-shrink:0}
+        .themes-title{font-size:18px;font-weight:900;flex:1;text-align:center}
+        .search-bar{margin:10px 16px;background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:12px;padding:11px 14px;display:flex;align-items:center;
+            gap:8px;flex-shrink:0}
+        .search-bar-text{font-size:14px;color:var(--muted);flex:1}
+
+        .themes-tabs{display:flex;gap:0;margin:0 16px 10px;flex-shrink:0;
+            background:var(--bg2);border:1px solid var(--bg3);border-radius:10px;overflow:hidden}
+        .theme-tab{flex:1;padding:9px;text-align:center;font-size:12px;font-weight:800;
+            color:var(--muted);cursor:pointer}
+        .theme-tab.active{background:var(--r);color:#fff}
+
+        .themes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;
+            padding:0 16px 16px;flex:1;overflow-y:auto;align-content:start}
+        .theme-card{border-radius:14px;overflow:hidden;cursor:pointer;
+            background:var(--bg2);border:1px solid var(--bg3)}
+        .theme-card-header{height:70px;display:flex;align-items:center;justify-content:center;font-size:34px}
+        .theme-card-body{padding:10px}
+        .theme-card-name{font-size:13px;font-weight:800}
+        .theme-card-meta{font-size:10px;color:var(--muted);margin-top:2px}
+        .theme-card-follow{display:inline-block;font-size:10px;font-weight:800;
+            padding:4px 10px;border-radius:20px;margin-top:6px;cursor:pointer}
+        .theme-card-follow.following{background:rgba(39,174,96,.15);color:var(--g)}
+        .theme-card-follow.not-following{background:rgba(229,57,53,.15);color:var(--r)}
+
+        /* ─── LEADERBOARD ─ */
+        .lb-header{padding:32px 16px 12px;display:flex;flex-direction:column;
+            align-items:center;gap:4px;flex-shrink:0}
+        .lb-title{font-size:18px;font-weight:900}
+        .lb-tabs{display:flex;gap:0;margin:8px 16px 0;flex-shrink:0;
+            background:var(--bg2);border:1px solid var(--bg3);border-radius:10px;overflow:hidden}
+        .lb-tab{flex:1;padding:9px;text-align:center;font-size:11px;font-weight:800;
+            color:var(--muted);cursor:pointer}
+        .lb-tab.active{background:var(--r);color:#fff}
+
+        .lb-podium{display:flex;align-items:flex-end;justify-content:center;
+            gap:8px;padding:16px 16px 8px;flex-shrink:0}
+        .lb-podium-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+        .lb-podium-av{border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;border:3px solid}
+        .lb-podium-av.first{width:64px;height:64px;font-size:30px;border-color:var(--y)}
+        .lb-podium-av.second{width:52px;height:52px;font-size:24px;border-color:#c0c0c0}
+        .lb-podium-av.third{width:46px;height:46px;font-size:20px;border-color:#cd7f32}
+        .lb-podium-score{font-size:14px;font-weight:900}
+        .lb-podium-name{font-size:10px;color:var(--muted);font-weight:700}
+        .lb-podium-rank{font-size:18px}
+        .lb-podium-block{height:14px;border-radius:4px 4px 0 0;width:70px}
+        .lb-podium-block.first{background:var(--y);height:36px}
+        .lb-podium-block.second{background:#c0c0c0;height:26px}
+        .lb-podium-block.third{background:#cd7f32;height:18px}
+
+        .lb-list{flex:1;overflow-y:auto;padding:0 16px}
+        .lb-item{display:flex;align-items:center;gap:10px;
+            padding:10px 0;border-bottom:1px solid var(--bg3)}
+        .lb-item.me{background:rgba(229,57,53,.06);border-radius:10px;padding:10px;
+            margin:4px -2px;border-bottom:none}
+        .lb-rank{font-size:14px;font-weight:900;width:22px;text-align:center;flex-shrink:0}
+        .lb-av{width:36px;height:36px;border-radius:50%;background:var(--bg3);
+            display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+        .lb-info{flex:1}
+        .lb-name{font-size:13px;font-weight:700}
+        .lb-meta{font-size:11px;color:var(--muted)}
+        .lb-score{font-size:16px;font-weight:900;color:var(--y)}
+
+        /* ─── DÉFI REÇU ─ */
+        .challenge-received{flex:1;background:radial-gradient(ellipse at 50% 30%,#2a0000,#000 70%);
+            display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;
+            padding:40px 24px 32px}
+        .cr-challenger-av{width:100px;height:100px;border-radius:50%;
+            background:var(--bg3);display:flex;align-items:center;justify-content:center;
+            font-size:48px;border:4px solid var(--r);
+            box-shadow:0 0 32px rgba(229,57,53,.4)}
+        .cr-title{font-size:24px;font-weight:900;text-align:center}
+        .cr-name{font-size:32px;font-weight:900;color:var(--r);text-align:center}
+        .cr-sub{font-size:14px;color:var(--muted);text-align:center}
+        .cr-topic-card{width:100%;background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px}
+        .cr-topic-icon{width:48px;height:48px;border-radius:12px;background:var(--r);
+            display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+        .cr-topic-name{font-size:16px;font-weight:800}
+        .cr-topic-sub{font-size:12px;color:var(--muted);margin-top:2px}
+        .cr-actions{display:flex;gap:10px;width:100%}
+        .cr-accept{flex:2;padding:16px;border-radius:14px;background:var(--r);
+            text-align:center;font-size:17px;font-weight:900;color:#fff;cursor:pointer}
+        .cr-decline{flex:1;padding:16px;border-radius:14px;background:var(--bg2);
+            border:1px solid var(--bg3);text-align:center;font-size:17px;font-weight:700;
+            color:var(--muted);cursor:pointer}
+        .cr-timer{font-size:11px;color:var(--muted);text-align:center}
+
+        /* ─── LEVEL UP ─ */
+        .levelup-bg{flex:1;background:radial-gradient(ellipse at 50% 40%,#1a0a00,#000 70%);
+            display:flex;flex-direction:column;align-items:center;justify-content:space-evenly;
+            padding:40px 24px 32px;position:relative;overflow:hidden}
+        .levelup-glow{position:absolute;width:200px;height:200px;border-radius:50%;
+            background:rgba(232,176,0,.08);top:30%;left:50%;transform:translateX(-50%);
+            filter:blur(40px);pointer-events:none}
+        .levelup-tag{background:rgba(232,176,0,.15);border:1px solid rgba(232,176,0,.3);
+            color:var(--y);font-size:11px;font-weight:900;letter-spacing:2px;
+            text-transform:uppercase;padding:5px 16px;border-radius:20px}
+        .levelup-number{font-size:80px;font-weight:900;color:var(--y);line-height:1;
+            filter:drop-shadow(0 0 20px rgba(232,176,0,.5))}
+        .levelup-label{font-size:14px;color:var(--muted);margin-top:-10px}
+        .levelup-title-unlocked{background:var(--bg2);border:1px solid var(--bg3);
+            border-radius:14px;padding:14px 20px;width:100%;text-align:center}
+        .levelup-title-label{font-size:10px;color:var(--muted);text-transform:uppercase;
+            letter-spacing:1.5px;font-weight:700;margin-bottom:6px}
+        .levelup-title-value{font-size:20px;font-weight:900;color:var(--y)}
+
+        .levelup-xp{width:100%}
+        .levelup-xp-bar{height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;margin-top:8px}
+        .levelup-xp-fill{height:100%;background:linear-gradient(90deg,var(--y),var(--r));
+            border-radius:5px;width:5%}/* vient de commencer le nouveau niveau */
+        .levelup-continue{width:100%;padding:16px;border-radius:14px;background:var(--y);
+            text-align:center;font-size:17px;font-weight:900;color:#000;cursor:pointer}
+
+        /* ─── HISTORIQUE ─ */
+        .history-filter{display:flex;gap:0;margin:10px 16px;flex-shrink:0;
+            background:var(--bg2);border:1px solid var(--bg3);border-radius:10px;overflow:hidden}
+        .hf-tab{flex:1;padding:9px;text-align:center;font-size:11px;font-weight:800;
+            color:var(--muted);cursor:pointer}
+        .hf-tab.active{background:var(--r);color:#fff}
+        .history-list{flex:1;overflow-y:auto;padding:0 16px}
+        .hl-item{display:flex;align-items:center;gap:10px;
+            padding:12px 0;border-bottom:1px solid var(--bg3)}
+        .hl-result-badge{width:36px;height:36px;border-radius:10px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:14px;font-weight:900;flex-shrink:0}
+        .hl-result-badge.win{background:rgba(39,174,96,.15);color:var(--g)}
+        .hl-result-badge.lose{background:rgba(229,57,53,.12);color:var(--r)}
+        .hl-info{flex:1}
+        .hl-opponent{font-size:14px;font-weight:700}
+        .hl-topic{font-size:11px;color:var(--muted);margin-top:1px}
+        .hl-date{font-size:10px;color:var(--muted2)}
+        .hl-score{text-align:right}
+        .hl-score-you{font-size:16px;font-weight:900}
+        .hl-score-them{font-size:12px;color:var(--muted)}
+
+        /* ─── BOOSTS ─ */
+        .boost-overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);
+            z-index:20;display:flex;align-items:flex-end;pointer-events:none}
+        .boost-panel{width:100%;background:var(--bg1);border-radius:20px 20px 0 0;
+            padding:16px 16px 28px;pointer-events:all}
+        .boost-title{font-size:13px;font-weight:900;text-align:center;
+            margin-bottom:14px;color:var(--muted)}
+        .boosts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+        .boost-item{background:var(--bg2);border:1px solid var(--bg3);border-radius:14px;
+            padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+        .boost-item.active{border-color:var(--y)}
+        .boost-icon{font-size:28px}
+        .boost-name{font-size:11px;font-weight:800;text-align:center;line-height:1.2}
+        .boost-count{font-size:10px;color:var(--muted)}
+        .boost-count b{color:var(--y)}
+        .boost-desc{font-size:9px;color:var(--muted);text-align:center;line-height:1.3}
+        .boost-cancel{margin-top:10px;width:100%;padding:12px;border-radius:12px;
+            background:var(--bg2);border:1px solid var(--bg3);text-align:center;
+            font-size:14px;font-weight:700;color:var(--muted)}
+
+        /* ─── ACTIVITÉ / NOTIFS ─ */
+        .activity-header{padding:32px 16px 10px;display:flex;align-items:center;
+            justify-content:space-between;flex-shrink:0}
+        .activity-title{font-size:18px;font-weight:900}
+        .mark-all{font-size:11px;color:var(--r);font-weight:700;cursor:pointer}
+        .activity-list{flex:1;overflow-y:auto}
+        .activity-group-label{font-size:9px;font-weight:900;letter-spacing:2px;
+            text-transform:uppercase;color:var(--muted);padding:10px 16px 6px}
+        .activity-item{display:flex;align-items:flex-start;gap:10px;
+            padding:12px 16px;border-bottom:1px solid var(--bg3);position:relative}
+        .activity-item.unread{background:rgba(229,57,53,.04)}
+        .activity-item.unread::before{content:'';position:absolute;left:0;top:50%;
+            transform:translateY(-50%);width:3px;height:60%;
+            background:var(--r);border-radius:0 2px 2px 0}
+        .ai-av{width:40px;height:40px;border-radius:50%;background:var(--bg3);
+            display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+        .ai-info{flex:1}
+        .ai-text{font-size:13px;font-weight:600;line-height:1.4}
+        .ai-text b{color:#fff;font-weight:800}
+        .ai-time{font-size:10px;color:var(--muted);margin-top:3px}
+        .ai-action{flex-shrink:0}
+        .ai-btn{font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;cursor:pointer}
+        .ai-btn.accept{background:var(--r);color:#fff}
+        .ai-btn.done{background:var(--bg3);color:var(--muted)}
+
+        /* ─── PARAMÈTRES ─ */
+        .settings-header{padding:32px 16px 12px;display:flex;align-items:center;
+            gap:10px;flex-shrink:0}
+        .settings-back{font-size:20px;cursor:pointer}
+        .settings-title{font-size:18px;font-weight:900;flex:1;text-align:center}
+        .settings-body{flex:1;overflow-y:auto}
+        .settings-section{padding:14px 16px 0}
+        .settings-section-lbl{font-size:9px;font-weight:900;letter-spacing:2px;
+            text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+        .settings-item{display:flex;align-items:center;padding:12px 0;
+            border-bottom:1px solid var(--bg3)}
+        .si-icon{font-size:20px;width:32px;flex-shrink:0}
+        .si-info{flex:1}
+        .si-label{font-size:14px;font-weight:700}
+        .si-sub{font-size:11px;color:var(--muted);margin-top:1px}
+        .si-right{font-size:14px;color:var(--muted)}
+        /* Toggle switch */
+        .toggle{width:44px;height:24px;background:var(--bg3);border-radius:12px;
+            position:relative;cursor:pointer;flex-shrink:0}
+        .toggle.on{background:var(--g)}
+        .toggle-knob{position:absolute;top:2px;left:2px;width:20px;height:20px;
+            border-radius:50%;background:#fff;transition:left .2s}
+        .toggle.on .toggle-knob{left:22px}
+
+        /* ─── DUEL INVITATION ENVOYÉE ─ */
+        .sent-invite-body{flex:1;display:flex;flex-direction:column;align-items:center;
+            justify-content:space-evenly;padding:40px 24px 32px}
+        .si-sent-icon{font-size:60px}
+        .si-sent-title{font-size:22px;font-weight:900;text-align:center}
+        .si-sent-sub{font-size:14px;color:var(--muted);text-align:center;line-height:1.5}
+        .si-friends-list{width:100%;display:flex;flex-direction:column;gap:8px}
+        .si-friend{background:var(--bg2);border:1px solid var(--bg3);border-radius:12px;
+            padding:12px 14px;display:flex;align-items:center;gap:10px}
+        .si-friend-av{width:38px;height:38px;border-radius:50%;background:var(--bg3);
+            display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+        .si-friend-name{flex:1;font-size:14px;font-weight:700}
+        .si-friend-status{font-size:11px;font-weight:800;padding:5px 12px;border-radius:20px;cursor:pointer}
+        .si-friend-status.invite{background:var(--r);color:#fff}
+        .si-friend-status.pending{background:var(--bg3);color:var(--muted)}
+        .si-friend-status.playing{background:rgba(39,174,96,.15);color:var(--g)}
+    
+        /* ═══════════════════════════════════════════════
+           SCREEN GROUP — 3 VARIANTES PAR ÉCRAN
+        ═══════════════════════════════════════════════ */
+        .screen-group{
+            display:flex;flex-direction:column;align-items:center;
+            gap:0;width:100%;border:1px solid var(--bg3);border-radius:20px;
+            overflow:hidden;background:var(--bg1);
+            box-shadow:0 8px 32px rgba(0,0,0,.6)}
+        .screen-group-header{
+            width:100%;padding:16px 20px 12px;
+            background:var(--bg);border-bottom:1px solid var(--bg3);
+            display:flex;flex-direction:column;gap:6px}
+        .screen-group-title{
+            font-size:13px;font-weight:900;color:#fff;
+            display:flex;align-items:center;gap:8px}
+        .screen-group-desc{
+            font-size:11px;color:var(--muted);line-height:1.7;max-width:900px}
+        .screen-group-specs{
+            width:100%;display:flex;flex-wrap:wrap;gap:4px;padding:8px 20px 12px;
+            background:var(--bg);border-bottom:1px solid var(--bg3)}
+        .spec-pill{
+            font-size:9px;font-weight:700;padding:3px 8px;border-radius:6px;
+            background:var(--bg3);color:var(--muted);display:flex;gap:4px;align-items:baseline}
+        .spec-pill-key{color:var(--teal);font-weight:900;text-transform:uppercase;letter-spacing:.5px}
+        .spec-integration{
+            width:100%;padding:8px 20px 12px;background:rgba(0,188,212,.04);
+            border-bottom:1px solid var(--bg3);font-size:10px;color:var(--teal);
+            line-height:1.7;display:flex;gap:6px;align-items:flex-start}
+        .spec-integration::before{content:'🔌';flex-shrink:0;font-size:11px}
+
+        .variants-row{
+            display:flex;width:100%;align-items:flex-start;
+            gap:0;overflow-x:auto}
+        .variant-col{
+            flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;
+            padding:20px 16px 24px;border-right:1px solid var(--bg3)}
+        .variant-col:last-child{border-right:none}
+        .variant-label{
+            font-size:9px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
+            color:var(--muted);margin-bottom:12px;
+            display:flex;align-items:center;gap:5px}
+        .variant-label .vl-dot{
+            width:6px;height:6px;border-radius:50%;flex-shrink:0}
+        .vl-mobile .vl-dot{background:var(--r)}
+        .vl-tablet .vl-dot{background:var(--y)}
+        .vl-desktop .vl-dot{background:var(--teal)}
+
+        /* ── Frames ───────────────────────────────────── */
+        /* Mobile : cadre téléphone existant (.phone) */
+
+        /* Tablet : cadre 768px */
+        .tablet-frame{
+            width:768px;min-height:480px;background:var(--bg);
+            border-radius:20px;border:2px solid #2a2a2a;
+            box-shadow:0 8px 32px rgba(0,0,0,.7);
+            overflow:hidden;display:flex;flex-direction:column;
+            position:relative;max-width:100%}
+        .tablet-frame .tablet-notch{
+            height:20px;background:#000;display:flex;align-items:center;justify-content:center;
+            flex-shrink:0}
+        .tablet-frame .tablet-cam{
+            width:8px;height:8px;border-radius:50%;background:#1a1a1a;border:1px solid #333}
+        .tablet-content{
+            flex:1;display:flex;flex-direction:column;overflow:hidden;
+            min-height:480px}
+
+        /* Desktop : cadre navigateur 1200px */
+        .desktop-frame{
+            width:1200px;background:var(--bg);
+            border-radius:12px;border:2px solid #2a2a2a;
+            box-shadow:0 8px 32px rgba(0,0,0,.7);
+            overflow:hidden;display:flex;flex-direction:column;
+            max-width:100%}
+        .desktop-topbar{
+            height:36px;background:#1a1a1a;border-bottom:1px solid #2a2a2a;
+            display:flex;align-items:center;gap:8px;padding:0 12px;flex-shrink:0}
+        .desktop-dot{width:10px;height:10px;border-radius:50%}
+        .desktop-dot.dc{background:#e53935}.desktop-dot.dy{background:#e8b000}.desktop-dot.dg{background:#27ae60}
+        .desktop-url{flex:1;margin:0 12px;height:22px;background:#111;border-radius:6px;
+            border:1px solid #333;display:flex;align-items:center;padding:0 10px;
+            font-size:10px;color:var(--muted);font-family:monospace;overflow:hidden;white-space:nowrap}
+        .desktop-content{
+            display:flex;flex:1;min-height:600px;overflow:hidden}
+        .desktop-sidebar{
+            width:220px;background:#0d0d0d;border-right:1px solid #1a1a1a;
+            flex-shrink:0;display:flex;flex-direction:column;padding:16px 12px;gap:4px}
+        .desktop-sidebar .ds-logo{
+            font-size:22px;font-weight:900;letter-spacing:-1px;
+            color:var(--r);padding:8px 4px 16px;border-bottom:1px solid #1a1a1a;margin-bottom:8px}
+        .desktop-sidebar .ds-item{
+            display:flex;align-items:center;gap:10px;padding:9px 10px;
+            border-radius:10px;font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+        .desktop-sidebar .ds-item:hover,.desktop-sidebar .ds-item.active{
+            background:var(--bg3);color:#fff}
+        .desktop-sidebar .ds-item.active .ds-icon{color:var(--r)}
+        .desktop-sidebar .ds-icon{font-size:15px}
+        .desktop-main{flex:1;overflow-y:auto;background:var(--bg)}
+
+        /* ── Layouts adaptatifs internes ─────────────── */
+        /* Tablet : layout 1 colonne pleine largeur avec bottom nav adapté */
+        .tablet-content .bottom-nav{
+            padding:8px 0 10px}
+        .tablet-content .bn-item{padding:7px 0 9px}
+        .tablet-content .bn-lbl{font-size:10px}
+        .tablet-content .bn-icon{font-size:20px}
+
+        /* Desktop home 2 cols */
+        .desktop-home-layout{
+            display:flex;gap:0;height:100%}
+        .desktop-home-main{
+            flex:1;overflow-y:auto;padding:24px 32px;display:flex;flex-direction:column;gap:20px}
+        .desktop-home-side{
+            width:320px;border-left:1px solid #1a1a1a;overflow-y:auto;
+            padding:24px 20px;display:flex;flex-direction:column;gap:16px;flex-shrink:0}
+        .desktop-home-side .home-section-lbl{padding:0 0 8px}
+
+        /* Desktop duel layout */
+        .desktop-duel-layout{
+            display:grid;grid-template-columns:1fr;
+            grid-template-rows:auto auto 1fr auto;
+            height:100%;position:relative}
+
+        /* Desktop leaderboard */
+        .desktop-lb-layout{
+            display:flex;gap:0;height:100%}
+        .desktop-lb-main{flex:1;overflow-y:auto;padding:24px 32px}
+        .desktop-lb-panel{width:280px;border-left:1px solid #1a1a1a;padding:24px 20px;flex-shrink:0}
+
+        /* Desktop settings */
+        .desktop-settings-layout{
+            display:flex;gap:0;height:100%}
+        .desktop-settings-nav{
+            width:240px;border-right:1px solid #1a1a1a;padding:20px 12px;
+            display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+        .desktop-settings-content{flex:1;overflow-y:auto;padding:24px 32px}
+        .desktop-settings-nav .ds-item.active{background:rgba(229,57,53,.15);color:var(--r)}
+
+        /* Tablet/Desktop: phase bars  wider */
+        .tablet-content .side-bar,.desktop-main .side-bar{width:10px}
+        .tablet-content .side-bar,.desktop-duel-layout .side-bar{width:10px}
+
+        /* Scaling tablet content phones */
+        .tablet-content .phone{
+            --phone-w:100%;
+            width:100%;min-width:0;height:auto;
+            border-radius:0;border:none;
+            box-shadow:none;flex:1}
+        .tablet-content .phone::before{display:none}
+
+        /* Desktop main phones */
+        .desktop-main > .phone{
+            width:100%;height:auto;
+            border-radius:0;border:none;box-shadow:none;flex:1}
+        .desktop-main > .phone::before{display:none}
+
+        /* Nav sidebar desktop */
+        .desktop-sidebar .ds-item[data-act="accueil"].active{color:var(--r)}
+
+        /* Responsive: tablet/desktop cols scrollable in smaller viewports */
+        @media(max-width:900px){
+            .variants-row{flex-direction:column}
+            .variant-col{border-right:none;border-bottom:1px solid var(--bg3)}
+            .variant-col:last-child{border-bottom:none}
+            .tablet-frame{width:100%}
+            .desktop-frame{width:100%}
+        }
+        @media(min-width:901px) and (max-width:1600px){
+            .desktop-frame{width:min(1100px,100%)}
+            .tablet-frame{width:min(680px,100%)}
+        }
+
+        
+
+        /* ── PAGE LAYOUT ─────────────────────────────────────────────── */
+        body {
+            background: #080808; font-family: 'Nunito', sans-serif;
+            color: #fff; margin: 0; padding: 0;
+            min-height: 100vh; display: flex; flex-direction: column;
+        }
+        a { color: inherit; text-decoration: none; }
+
+        /* Topbar */
+        .topbar {
+            position: sticky; top: 0; z-index: 200;
+            background: rgba(8,8,8,.97); backdrop-filter: blur(12px);
+            border-bottom: 1px solid #111;
+            height: 52px; padding: 0 24px;
+            display: flex; align-items: center; gap: 14px;
+            flex-shrink: 0;
+        }
+        .tb-logo { font-size: 18px; font-weight: 900; letter-spacing: -1px; color: #e53935; white-space: nowrap; }
+        .tb-sep { width: 1px; height: 18px; background: #1a1a1a; flex-shrink: 0; }
+        .tb-crumb { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #333; flex: 1; min-width: 0; }
+        .tb-crumb a { color: #333; } .tb-crumb a:hover { color: #aaa; }
+        .tb-crumb .sep { color: #1a1a1a; margin: 0 2px; }
+        .tb-crumb .cur { color: #aaa; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .tb-index {
+            font-size: 10px; font-weight: 700; letter-spacing: .5px;
+            padding: 5px 12px; border-radius: 20px;
+            border: 1px solid #1a1a1a; background: transparent; color: #333;
+            white-space: nowrap; flex-shrink: 0; transition: all .2s;
+        }
+        .tb-index:hover { color: #fff; border-color: #333; background: #111; }
+
+        /* Screen info header */
+        .screen-info {
+            padding: 24px 24px 0; max-width: 1600px; width: 100%;
+            margin: 0 auto; box-sizing: border-box;
+        }
+        .si-inner {
+            border: 1px solid #111; border-radius: 14px;
+            background: #0a0a0a; overflow: hidden;
+        }
+        .si-top {
+            padding: 18px 20px 14px; border-bottom: 1px solid #111;
+            display: flex; align-items: flex-start; gap: 14px;
+        }
+        .si-snum {
+            width: 28px; height: 28px; border-radius: 50%;
+            background: #e53935; color: #fff; font-size: 12px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .si-body { flex: 1; min-width: 0; }
+        .si-badges { display: flex; gap: 7px; align-items: center; margin-bottom: 6px; }
+        .cat-badge {
+            font-size: 9px; font-weight: 900; letter-spacing: 1.5px;
+            text-transform: uppercase; padding: 2px 9px; border-radius: 20px;
+        }
+        .si-num-badge {
+            font-size: 9px; font-weight: 700; color: #333;
+            padding: 2px 9px; border-radius: 20px; background: #111; border: 1px solid #1a1a1a;
+        }
+        .si-title { font-size: 20px; font-weight: 900; letter-spacing: -.5px; line-height: 1.2; margin-bottom: 6px; }
+        .si-desc { font-size: 11px; color: #444; line-height: 1.8; max-width: 760px; }
+        .si-specs {
+            padding: 10px 20px; display: flex; flex-wrap: wrap; gap: 5px;
+            border-bottom: 1px solid #111;
+        }
+        .spec-pill {
+            font-size: 10px; font-weight: 600; padding: 3px 9px;
+            border-radius: 7px; background: #0d0d0d; border: 1px solid #111;
+            color: #444; display: flex; gap: 5px; align-items: baseline; line-height: 1.6;
+        }
+        .spec-pill-key {
+            color: #00bcd4; font-weight: 900; text-transform: uppercase;
+            font-size: 9px; letter-spacing: .5px; white-space: nowrap;
+        }
+        .si-integration {
+            padding: 9px 20px; display: flex; gap: 7px; align-items: flex-start;
+            font-size: 10px; color: #00bcd4; line-height: 1.8;
+            background: rgba(0,188,212,.025);
+        }
+        .si-integration::before { content: '🔌'; flex-shrink: 0; font-size: 11px; }
+
+        /* Prev/next */
+        .pn-nav {
+            padding: 14px 24px 0; max-width: 1600px; width: 100%;
+            margin: 0 auto; box-sizing: border-box;
+            display: flex; justify-content: space-between; gap: 10px;
+        }
+        .pn-btn {
+            font-size: 11px; font-weight: 700; padding: 7px 14px;
+            border-radius: 9px; background: #0a0a0a; border: 1px solid #111;
+            color: #444; transition: all .2s; max-width: 280px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+        }
+        .pn-btn:hover { color: #fff; border-color: #222; background: #111; }
+        .pn-disabled { opacity: .25; cursor: default; }
+
+        /* Variants */
+        .variants-area {
+            flex: 1; padding: 20px 24px 48px;
+            max-width: 1600px; width: 100%; margin: 0 auto; box-sizing: border-box;
+        }
+        .variants-grid {
+            display: grid;
+            grid-template-columns: var(--phone-w) minmax(0,1fr) minmax(0,1fr);
+            gap: 20px; align-items: start;
+        }
+        .v-block { display: flex; flex-direction: column; gap: 8px; }
+        .v-label {
+            font-size: 9px; font-weight: 900; letter-spacing: 2px;
+            text-transform: uppercase; color: #2a2a2a;
+            display: flex; align-items: center; gap: 5px;
+        }
+        .v-dot { width: 6px; height: 6px; border-radius: 50%; }
+        .vl-mobile  .v-dot { background: #e53935; }
+        .vl-tablet  .v-dot { background: #e8b000; }
+        .vl-desktop .v-dot { background: #00bcd4; }
+
+        /* Tablet frame */
+        .tablet-frame {
+            width: 100%; border-radius: 14px; overflow: hidden;
+            border: 2px solid #1a1a1a; background: #000;
+            box-shadow: 0 4px 24px rgba(0,0,0,.6);
+            display: flex; flex-direction: column;
+        }
+        .tf-notch {
+            height: 16px; background: #000; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .tf-cam { width: 6px; height: 6px; border-radius: 50%; background: #111; border: 1px solid #1e1e1e; }
+        .tf-body { flex: 1; display: flex; flex-direction: column; background: #000; }
+
+        /* Desktop frame */
+        .desktop-frame {
+            width: 100%; border-radius: 10px; overflow: hidden;
+            border: 2px solid #1a1a1a; background: #000;
+            box-shadow: 0 4px 24px rgba(0,0,0,.6);
+            display: flex; flex-direction: column;
+        }
+        .df-bar {
+            height: 32px; background: #111; border-bottom: 1px solid #1a1a1a;
+            display: flex; align-items: center; gap: 6px; padding: 0 11px;
+            flex-shrink: 0;
+        }
+        .df-dot { width: 9px; height: 9px; border-radius: 50%; }
+        .df-r { background: #e53935; } .df-y { background: #e8b000; } .df-g { background: #27ae60; }
+        .df-url {
+            flex: 1; height: 18px; background: #0a0a0a; border-radius: 4px;
+            border: 1px solid #1a1a1a; margin: 0 9px;
+            display: flex; align-items: center; padding: 0 8px;
+            font-size: 9px; color: #2a2a2a; font-family: monospace;
+            overflow: hidden; white-space: nowrap;
+        }
+        .df-body { display: flex; flex: 1; min-height: 480px; overflow: hidden; }
+        .df-sidebar {
+            width: 190px; background: #080808; border-right: 1px solid #0d0d0d;
+            flex-shrink: 0; padding: 12px 9px; display: flex; flex-direction: column; gap: 2px;
+        }
+        .df-logo {
+            font-size: 17px; font-weight: 900; letter-spacing: -1px;
+            color: #e53935; padding: 5px 4px 12px;
+            border-bottom: 1px solid #0d0d0d; margin-bottom: 5px;
+        }
+        .ds-item {
+            display: flex; align-items: center; gap: 8px; padding: 7px 8px;
+            border-radius: 7px; font-size: 11px; font-weight: 700; color: #222;
+        }
+        .ds-item.active { background: rgba(229,57,53,.1); color: #fff; }
+        .ds-item.active .ds-icon { color: #e53935; }
+        .ds-icon { font-size: 13px; }
+        .df-main {
+            flex: 1; overflow-y: auto; background: #000;
+            display: flex; flex-direction: column;
+        }
+
+        /* Phone overrides inside frames */
+        .tf-body .phone,
+        .df-main .phone {
+            width: 100% !important;
+            height: auto !important;
+            min-height: 400px;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            flex: 1;
+        }
+        .tf-body .phone::before,
+        .df-main .phone::before { display: none !important; }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .variants-grid { grid-template-columns: var(--phone-w) 1fr; }
+            .v-block:nth-child(3) { grid-column: 1 / -1; }
+        }
+        @media (max-width: 700px) {
+            .variants-grid { grid-template-columns: 1fr; }
+            .screen-info, .pn-nav, .variants-area { padding-left: 12px; padding-right: 12px; }
+            .topbar { padding: 0 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="topbar">
+    <a href="index.html" class="tb-logo">⚡ QuizUp</a>
+    <div class="tb-sep"></div>
+    <div class="tb-crumb">
+        <a href="index.html">Maquettes</a>
+        <span class="sep">›</span>
+        <span class="cur">Paramètres</span>
+    </div>
+    <a href="index.html" class="tb-index">☰ Tous les écrans</a>
+</div>
+
+<div class="screen-info">
+    <div class="si-inner">
+        <div class="si-top">
+            <div class="si-snum">7</div>
+            <div class="si-body">
+                <div class="si-badges">
+                    <span class="cat-badge" style="background:#00bcd418;color:#00bcd4;border:1px solid #00bcd430">Navigation</span>
+                    <span class="si-num-badge">Écran 7 / 22</span>
+                </div>
+                <div class="si-title">Paramètres</div>
+                <div class="si-desc">Configuration du compte et des préférences. Navigation hiérarchique par sections. Pas de bottom nav.</div>
+            </div>
+        </div>
+        <div class="si-specs">
+            <span class="spec-pill"><span class="spec-pill-key">Header</span>← retour + "Paramètres"</span>
+                <span class="spec-pill"><span class="spec-pill-key">Sections</span>Compte · Notifications · Confidentialité · Apparence · Aide · Déconnexion (danger)</span>
+                <span class="spec-pill"><span class="spec-pill-key">Items</span>Icône + libellé + valeur courante + › chevron</span>
+                <span class="spec-pill"><span class="spec-pill-key">Toggles</span>Switch iOS-style pour les booléens</span>
+                <span class="spec-pill"><span class="spec-pill-key">Zone danger</span>Supprimer compte : fond rouge transparent · double confirmation</span>
+        </div>
+        <div class="si-integration">GET /settings · PATCH /settings · DELETE /account avec double confirm</div>
+    </div>
+</div>
+
+<div class="pn-nav">
+    <a href="06-activite.html" class="pn-btn pn-prev">← Activité — Notifications</a>
+    <a href="08-categorie.html" class="pn-btn pn-next">Page Catégorie (Thème détail) →</a>
+</div>
+
+<div class="variants-area">
+    <div class="variants-grid">
+
+        <!-- ── MOBILE ─────────────────────────────────────── -->
+        <div class="v-block">
+            <div class="v-label vl-mobile"><span class="v-dot"></span>Mobile · 375 × 812</div>
+                                <div class="phone">
+            <div class="settings-header">
+                <div class="settings-back">←</div>
+                <div class="settings-title">Paramètres</div>
+                <div style="width:28px"></div>
+            </div>
+            <div class="settings-body">
+                <!-- Compte -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Compte</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🦊</div>
+                        <div class="si-info"><div class="si-label">Nom d'utilisateur</div><div class="si-sub">amandecherie</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📧</div>
+                        <div class="si-info"><div class="si-label">Adresse e-mail</div><div class="si-sub">a***@gmail.com</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🔒</div>
+                        <div class="si-info"><div class="si-label">Mot de passe</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                </div>
+                <!-- Notifications -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Notifications</div>
+                    <div class="settings-item">
+                        <div class="si-icon">⚡</div>
+                        <div class="si-info"><div class="si-label">Défis reçus</div><div class="si-sub">Push + In-app</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🏆</div>
+                        <div class="si-info"><div class="si-label">Classements</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">💬</div>
+                        <div class="si-info"><div class="si-label">Messages</div></div>
+                        <div class="toggle"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📢</div>
+                        <div class="si-info"><div class="si-label">Promotions</div></div>
+                        <div class="toggle"><div class="toggle-knob"></div></div>
+                    </div>
+                </div>
+                <!-- Jeu -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Jeu</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🔊</div>
+                        <div class="si-info"><div class="si-label">Sons</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📳</div>
+                        <div class="si-info"><div class="si-label">Vibrations</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🌐</div>
+                        <div class="si-info"><div class="si-label">Langue</div><div class="si-sub">Français</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                </div>
+                <!-- Divers -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Divers</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🛡️</div>
+                        <div class="si-info"><div class="si-label">Confidentialité</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📋</div>
+                        <div class="si-info"><div class="si-label">Conditions d'utilisation</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item" style="border:none">
+                        <div class="si-icon">🚪</div>
+                        <div class="si-info"><div class="si-label" style="color:var(--r)">Se déconnecter</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- ── TABLET ─────────────────────────────────────── -->
+        <div class="v-block">
+            <div class="v-label vl-tablet"><span class="v-dot"></span>Tablet · 768px</div>
+            <div class="tablet-frame">
+                <div class="tf-notch"><div class="tf-cam"></div></div>
+                <div class="tf-body">
+                                        <div class="phone" style="width:100%;height:auto;min-height:400px;border-radius:0;border:none;box-shadow:none;flex:1">
+            <div class="settings-header">
+                <div class="settings-back">←</div>
+                <div class="settings-title">Paramètres</div>
+                <div style="width:28px"></div>
+            </div>
+            <div class="settings-body">
+                <!-- Compte -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Compte</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🦊</div>
+                        <div class="si-info"><div class="si-label">Nom d'utilisateur</div><div class="si-sub">amandecherie</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📧</div>
+                        <div class="si-info"><div class="si-label">Adresse e-mail</div><div class="si-sub">a***@gmail.com</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🔒</div>
+                        <div class="si-info"><div class="si-label">Mot de passe</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                </div>
+                <!-- Notifications -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Notifications</div>
+                    <div class="settings-item">
+                        <div class="si-icon">⚡</div>
+                        <div class="si-info"><div class="si-label">Défis reçus</div><div class="si-sub">Push + In-app</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🏆</div>
+                        <div class="si-info"><div class="si-label">Classements</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">💬</div>
+                        <div class="si-info"><div class="si-label">Messages</div></div>
+                        <div class="toggle"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📢</div>
+                        <div class="si-info"><div class="si-label">Promotions</div></div>
+                        <div class="toggle"><div class="toggle-knob"></div></div>
+                    </div>
+                </div>
+                <!-- Jeu -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Jeu</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🔊</div>
+                        <div class="si-info"><div class="si-label">Sons</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📳</div>
+                        <div class="si-info"><div class="si-label">Vibrations</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🌐</div>
+                        <div class="si-info"><div class="si-label">Langue</div><div class="si-sub">Français</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                </div>
+                <!-- Divers -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Divers</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🛡️</div>
+                        <div class="si-info"><div class="si-label">Confidentialité</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📋</div>
+                        <div class="si-info"><div class="si-label">Conditions d'utilisation</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item" style="border:none">
+                        <div class="si-icon">🚪</div>
+                        <div class="si-info"><div class="si-label" style="color:var(--r)">Se déconnecter</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── DESKTOP ────────────────────────────────────── -->
+        <div class="v-block">
+            <div class="v-label vl-desktop"><span class="v-dot"></span>Desktop · 1200px</div>
+            <div class="desktop-frame">
+                <div class="df-bar">
+                    <div class="df-dot df-r"></div>
+                    <div class="df-dot df-y"></div>
+                    <div class="df-dot df-g"></div>
+                    <div class="df-url">https://quizup.app/settings</div>
+                </div>
+                <div class="df-body">
+                    <div class="df-sidebar">
+                        <div class="df-logo">⚡ QuizUp</div>
+                            <div class="ds-item"><span class="ds-icon">🏠</span>Accueil</div>
+                            <div class="ds-item"><span class="ds-icon">👥</span>Personnes</div>
+                            <div class="ds-item"><span class="ds-icon">⊞</span>Thèmes</div>
+                            <div class="ds-item"><span class="ds-icon">🔔</span>Activité</div>
+                            <div class="ds-item active"><span class="ds-icon">👤</span>Profil</div>
+                    </div>
+                    <div class="df-main">
+                                            <div class="phone" style="width:100%;height:auto;min-height:500px;border-radius:0;border:none;box-shadow:none;flex:1">
+            <div class="settings-header">
+                <div class="settings-back">←</div>
+                <div class="settings-title">Paramètres</div>
+                <div style="width:28px"></div>
+            </div>
+            <div class="settings-body">
+                <!-- Compte -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Compte</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🦊</div>
+                        <div class="si-info"><div class="si-label">Nom d'utilisateur</div><div class="si-sub">amandecherie</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📧</div>
+                        <div class="si-info"><div class="si-label">Adresse e-mail</div><div class="si-sub">a***@gmail.com</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🔒</div>
+                        <div class="si-info"><div class="si-label">Mot de passe</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                </div>
+                <!-- Notifications -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Notifications</div>
+                    <div class="settings-item">
+                        <div class="si-icon">⚡</div>
+                        <div class="si-info"><div class="si-label">Défis reçus</div><div class="si-sub">Push + In-app</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🏆</div>
+                        <div class="si-info"><div class="si-label">Classements</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">💬</div>
+                        <div class="si-info"><div class="si-label">Messages</div></div>
+                        <div class="toggle"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📢</div>
+                        <div class="si-info"><div class="si-label">Promotions</div></div>
+                        <div class="toggle"><div class="toggle-knob"></div></div>
+                    </div>
+                </div>
+                <!-- Jeu -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Jeu</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🔊</div>
+                        <div class="si-info"><div class="si-label">Sons</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📳</div>
+                        <div class="si-info"><div class="si-label">Vibrations</div></div>
+                        <div class="toggle on"><div class="toggle-knob"></div></div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">🌐</div>
+                        <div class="si-info"><div class="si-label">Langue</div><div class="si-sub">Français</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                </div>
+                <!-- Divers -->
+                <div class="settings-section">
+                    <div class="settings-section-lbl">Divers</div>
+                    <div class="settings-item">
+                        <div class="si-icon">🛡️</div>
+                        <div class="si-info"><div class="si-label">Confidentialité</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item">
+                        <div class="si-icon">📋</div>
+                        <div class="si-info"><div class="si-label">Conditions d'utilisation</div></div>
+                        <div class="si-right">›</div>
+                    </div>
+                    <div class="settings-item" style="border:none">
+                        <div class="si-icon">🚪</div>
+                        <div class="si-info"><div class="si-label" style="color:var(--r)">Se déconnecter</div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

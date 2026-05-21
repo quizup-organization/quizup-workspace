@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>QuizUp — Maquettes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --r:#e53935; --teal:#00bcd4; --y:#e8b000; --g:#27ae60; }
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+        body{background:#080808;font-family:'Nunito',sans-serif;color:#fff;min-height:100vh}
+        a{color:inherit;text-decoration:none}
+        .topbar{position:sticky;top:0;z-index:100;background:rgba(8,8,8,.97);backdrop-filter:blur(12px);
+            border-bottom:1px solid #111;height:52px;padding:0 24px;
+            display:flex;align-items:center;gap:14px}
+        .tb-logo{font-size:18px;font-weight:900;letter-spacing:-1px;color:var(--r)}
+        .tb-badge{font-size:9px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;
+            background:rgba(229,57,53,.12);color:var(--r);border:1px solid rgba(229,57,53,.25);
+            padding:2px 9px;border-radius:20px}
+        .tb-stats{margin-left:auto;font-size:10px;color:#222;font-weight:700}
+        .hero{padding:40px 24px 24px;max-width:1200px;margin:0 auto}
+        .hero-title{font-size:32px;font-weight:900;letter-spacing:-1.5px;line-height:1.1;margin-bottom:10px}
+        .hero-title span{color:var(--r)}
+        .hero-desc{font-size:12px;color:#333;line-height:1.9;max-width:520px}
+        .hero-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+        .chip{font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px;
+            border:1px solid #111;color:#222}
+        .content{padding:0 24px 64px;max-width:1200px;margin:0 auto}
+        .divider{height:1px;background:#0d0d0d;margin-bottom:28px}
+        .cat-sec{margin-bottom:36px}
+        .cat-hd{display:flex;align-items:center;gap:12px;padding:14px 0 12px;
+            border-bottom:1px solid #0d0d0d;margin-bottom:14px}
+        .cat-ico{font-size:20px}
+        .cat-name{font-size:13px;font-weight:900}
+        .cat-sub{font-size:10px;color:#222;margin-top:2px}
+        .cat-count{margin-left:auto;font-size:10px;font-weight:900}
+        .sc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+        .sc{background:#0a0a0a;border:1px solid #0d0d0d;border-radius:11px;
+            padding:14px;display:flex;flex-direction:column;gap:7px;
+            transition:all .2s;cursor:pointer}
+        .sc:hover{border-color:#1a1a1a;background:#0d0d0d;transform:translateY(-2px)}
+        .sc-n{width:22px;height:22px;border-radius:50%;background:var(--r);
+            color:#fff;font-size:10px;font-weight:900;
+            display:flex;align-items:center;justify-content:center}
+        .sc-t{font-size:11px;font-weight:800;line-height:1.4;color:#aaa}
+        .sc:hover .sc-t{color:#fff}
+        @media(max-width:600px){.hero,.content{padding-left:14px;padding-right:14px}.topbar{padding:0 14px}.hero-title{font-size:24px}}
+    </style>
+</head>
+<body>
+<div class="topbar">
+    <div class="tb-logo">⚡ QuizUp</div>
+    <span class="tb-badge">Maquettes v5</span>
+    <div class="tb-stats">22 écrans · Mobile / Tablet / Desktop</div>
+</div>
+<div class="hero">
+    <div class="hero-title">QuizUp —<br><span>Wireframes Complets</span></div>
+    <div class="hero-desc">Maquettes interactives de tous les écrans avec 3 variantes (Mobile 375px · Tablet 768px · Desktop 1200px), descriptions fonctionnelles et spécifications d'intégration.</div>
+    <div class="hero-chips">
+        <span class="chip">🗺️ Navigation</span>
+        <span class="chip">⚡ Flux Duel</span>
+        <span class="chip">👥 Social</span>
+        <span class="chip">📱 Mobile</span>
+        <span class="chip">💻 Tablet</span>
+        <span class="chip">🖥️ Desktop</span>
+    </div>
+</div>
+<div class="content">
+    <div class="divider"></div>
+    
+        <section class="cat-sec">
+            <div class="cat-hd">
+                <span class="cat-ico">🗺️</span>
+                <div>
+                    <div class="cat-name">Navigation</div>
+                    <div class="cat-sub">Navigation principale, profil, thèmes et paramètres</div>
+                </div>
+                <span class="cat-count" style="color:#00bcd4">7 écrans</span>
+            </div>
+            <div class="sc-grid">
+                <a href="02-home.html" class="sc">
+                    <span class="sc-n">2</span>
+                    <span class="sc-t">Accueil — Home</span>
+                </a>
+                <a href="03-themes.html" class="sc">
+                    <span class="sc-n">3</span>
+                    <span class="sc-t">Navigateur de Thèmes</span>
+                </a>
+                <a href="04-profil.html" class="sc">
+                    <span class="sc-n">4</span>
+                    <span class="sc-t">Profil Utilisateur</span>
+                </a>
+                <a href="06-activite.html" class="sc">
+                    <span class="sc-n">6</span>
+                    <span class="sc-t">Activité — Notifications</span>
+                </a>
+                <a href="07-parametres.html" class="sc">
+                    <span class="sc-n">7</span>
+                    <span class="sc-t">Paramètres</span>
+                </a>
+                <a href="08-categorie.html" class="sc">
+                    <span class="sc-n">8</span>
+                    <span class="sc-t">Page Catégorie (Thème détail)</span>
+                </a>
+                <a href="23-historique.html" class="sc">
+                    <span class="sc-n">23</span>
+                    <span class="sc-t">Historique des Duels</span>
+                </a>
+            </div>
+        </section>
+        <section class="cat-sec">
+            <div class="cat-hd">
+                <span class="cat-ico">⚡</span>
+                <div>
+                    <div class="cat-name">Duel</div>
+                    <div class="cat-sub">Flux complet du duel : matchmaking → questions → révélation → résultats</div>
+                </div>
+                <span class="cat-count" style="color:#e53935">12 écrans</span>
+            </div>
+            <div class="sc-grid">
+                <a href="09-matchmaking.html" class="sc">
+                    <span class="sc-n">9</span>
+                    <span class="sc-t">Matchmaking — Recherche adversaire</span>
+                </a>
+                <a href="10-adversaire.html" class="sc">
+                    <span class="sc-n">10</span>
+                    <span class="sc-t">Adversaire Trouvé</span>
+                </a>
+                <a href="11-question.html" class="sc">
+                    <span class="sc-n">11</span>
+                    <span class="sc-t">Question — État Neutre</span>
+                </a>
+                <a href="12-p1-repondu.html" class="sc">
+                    <span class="sc-n">12</span>
+                    <span class="sc-t">P1 a répondu</span>
+                </a>
+                <a href="13-deux-repondu.html" class="sc">
+                    <span class="sc-n">13</span>
+                    <span class="sc-t">Les deux ont répondu</span>
+                </a>
+                <a href="14-revelation.html" class="sc">
+                    <span class="sc-n">14</span>
+                    <span class="sc-t">Révélation — Résultat du round</span>
+                </a>
+                <a href="15-timeout.html" class="sc">
+                    <span class="sc-n">15</span>
+                    <span class="sc-t">Timeout</span>
+                </a>
+                <a href="16-question-img.html" class="sc">
+                    <span class="sc-n">16</span>
+                    <span class="sc-t">Question avec Image</span>
+                </a>
+                <a href="17-boosts.html" class="sc">
+                    <span class="sc-n">17</span>
+                    <span class="sc-t">Boosts — Sélection en jeu</span>
+                </a>
+                <a href="18-victoire.html" class="sc">
+                    <span class="sc-n">18</span>
+                    <span class="sc-t">Résultats — Victoire</span>
+                </a>
+                <a href="19-defaite.html" class="sc">
+                    <span class="sc-n">19</span>
+                    <span class="sc-t">Résultats — Défaite</span>
+                </a>
+                <a href="20-level-up.html" class="sc">
+                    <span class="sc-n">20</span>
+                    <span class="sc-t">Level Up !</span>
+                </a>
+            </div>
+        </section>
+        <section class="cat-sec">
+            <div class="cat-hd">
+                <span class="cat-ico">👥</span>
+                <div>
+                    <div class="cat-name">Social</div>
+                    <div class="cat-sub">Classement, défis, invitations et interactions entre joueurs</div>
+                </div>
+                <span class="cat-count" style="color:#e8b000">3 écrans</span>
+            </div>
+            <div class="sc-grid">
+                <a href="05-classement.html" class="sc">
+                    <span class="sc-n">5</span>
+                    <span class="sc-t">Classement (Leaderboard)</span>
+                </a>
+                <a href="21-defi-recu.html" class="sc">
+                    <span class="sc-n">21</span>
+                    <span class="sc-t">Défi Reçu</span>
+                </a>
+                <a href="22-inviter.html" class="sc">
+                    <span class="sc-n">22</span>
+                    <span class="sc-t">Inviter un Ami — Défi</span>
+                </a>
+            </div>
+        </section>
+</div>
+</body>
+</html>
